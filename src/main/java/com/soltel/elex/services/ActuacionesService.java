@@ -1,6 +1,6 @@
 package com.soltel.elex.services;
 
-import com.soltel.elex.models.*;
+import com.soltel.elex.models.ActuacionesModel;
 import com.soltel.elex.repositories.IActuacionesRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ public class ActuacionesService {
 
     private final IActuacionesRepository actuacionesRepository;
     
-     // Constructor para cargar el repositorio que yo he hecho
+    // Constructor para cargar el repositorio que yo he hecho
     // Inyecto la dependencia
     @Autowired
     public ActuacionesService(IActuacionesRepository actuacionesRepository) {
