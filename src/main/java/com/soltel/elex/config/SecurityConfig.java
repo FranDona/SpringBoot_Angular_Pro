@@ -17,15 +17,16 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/inicio").hasRole("ADMIN")
-                        .anyRequest().authenticated())
-                .formLogin(form -> form
-                        .defaultSuccessUrl("/inicio", true));
-        // Otras configuraciones de seguridad según sea necesario
-
+            .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/inicio")
+                .hasRole("ADMIN")
+                .anyRequest().authenticated())
+            .formLogin(form -> form
+                .defaultSuccessUrl("/inicio", true));
+        
         return http.build();
     }
 
@@ -35,13 +36,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user = User.builder()
-                .username("soltel")
-                .password(passwordEncoder.encode("admin"))
-                .roles("ADMIN")
-                .build();
+    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
+        UserDetails usuarioAdmin = User.builder()
+            .username("soltel")
+            .password(encoder.encode("admin"))
+            .roles("ADMIN")
+            .build();
 
-        return new InMemoryUserDetailsManager(user);
+        return new InMemoryUserDetailsManager(usuarioAdmin);
     }
 }
