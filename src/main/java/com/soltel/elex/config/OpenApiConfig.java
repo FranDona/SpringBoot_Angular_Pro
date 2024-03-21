@@ -14,9 +14,9 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
             .info(new Info()
-                .title("Mi API")
-                .description("Documentación de la API")
-                .version("v1"))
+                .title("Endpoints Elex")
+                .description("Documentación Swagger de la API")
+                .version("v1.0"))
             .components(new Components()
                 .addSecuritySchemes("basicAuth", 
                     new SecurityScheme()

@@ -119,17 +119,17 @@ public class ExpedientesModel {
     public ExpedientesModel() {
     }
 
-    public ExpedientesModel(int id, String codigo, Date fecha, String estado, String opciones, String descripcion,
-            TiposExpedienteModel tipo, boolean borrado, Timestamp fechaCreacion) {
-        this.id = id;
-        this.codigo = codigo;
-        this.fecha = fecha;
-        this.estado = estado;
-        this.opciones = opciones;
-        this.descripcion = descripcion;
-        this.tipo = tipo;
-        this.borrado = borrado;
-        this.fechaCreacion = fechaCreacion;
+    public ExpedientesModel(int id, String codigo, java.sql.Date fecha, String estado, String opciones, String descripcion,
+    TiposExpedienteModel tipo, boolean borrado, Timestamp fechaCreacion) {
+    this.id = id;
+    this.codigo = codigo;
+    this.fecha = fecha;
+    this.estado = estado;
+    this.opciones = opciones;
+    this.descripcion = descripcion;
+    this.tipo = tipo;
+    this.borrado = borrado;
+    this.fechaCreacion = fechaCreacion;
     }
     
     
