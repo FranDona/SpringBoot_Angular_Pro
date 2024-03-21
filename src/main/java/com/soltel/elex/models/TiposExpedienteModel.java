@@ -1,6 +1,5 @@
 package com.soltel.elex.models;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,9 +20,10 @@ public class TiposExpedienteModel {
     @Column(unique = true)
     private String materia;
 
+    // Establecer el valor por defecto como false para borrado
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean borrado;
 
-    @Column(name = "fecha_creacion", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp fechaCreacion;
 
     // Getter y Setter
@@ -72,8 +72,5 @@ public class TiposExpedienteModel {
         this.borrado = borrado;
         this.fechaCreacion = fechaCreacion;
     }
-
-
-    
 
 }
