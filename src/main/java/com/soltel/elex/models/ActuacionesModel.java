@@ -13,7 +13,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "Actuaciones")
+@Table(name = "actuaciones")
 public class ActuacionesModel {
 
     @Id

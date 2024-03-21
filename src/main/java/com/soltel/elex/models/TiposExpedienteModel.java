@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "TiposExpediente")
+@Table(name = "tipos_expediente")
 public class TiposExpedienteModel {
 
     @Id
