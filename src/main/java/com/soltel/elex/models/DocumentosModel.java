@@ -42,20 +42,40 @@ public class DocumentosModel {
         return ruta;
     }
 
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
+
     public double getTasa() {
         return tasa;
+    }
+
+    public void setTasa(double tasa) {
+        this.tasa = tasa;
     }
 
     public ExpedientesModel getExpediente() {
         return expediente;
     }
 
+    public void setExpediente(ExpedientesModel expediente) {
+        this.expediente = expediente;
+    }
+
     public boolean isBorrado() {
         return borrado;
     }
 
+    public void setBorrado(boolean borrado) {
+        this.borrado = borrado;
+    }
+
     public Timestamp getFechaCreacion() {
         return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Timestamp fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 
     
@@ -72,7 +92,4 @@ public class DocumentosModel {
         this.borrado = borrado;
         this.fechaCreacion = fechaCreacion;
     }
-
-    
-    
 }

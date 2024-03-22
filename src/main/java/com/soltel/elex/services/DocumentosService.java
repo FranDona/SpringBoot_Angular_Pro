@@ -1,6 +1,7 @@
 package com.soltel.elex.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.soltel.elex.models.DocumentosModel;
 
@@ -12,19 +13,26 @@ import com.soltel.elex.repositories.IDocumentosRepository;
 @Service
 public class DocumentosService {
 
-    private final IDocumentosRepository documentosRepository;
-    
-    // Constructor para cargar el repositorio que yo he hecho
-    // Inyecto la dependencia
-    @Autowired
-    public DocumentosService(IDocumentosRepository documentosRepository) {
-        this.documentosRepository = documentosRepository;
+@Autowired
+    private IDocumentosRepository repository;
+
+    public List<DocumentosModel> consultarDocumentos() {
+        return repository.findAll();
     }
 
-    // Creo mis propios métodos para hacer consultas
-    // findAll -> SELECT * FROM Documentos
-    // OJO! Este nombre es por convención: findAllDocumentos
-    public List<DocumentosModel> findAllDocumentos() {
-        return documentosRepository.findAll();
+    public DocumentosModel insertarDocumentos(DocumentosModel tipo) {
+        return repository.save(tipo);
+    }
+
+    public DocumentosModel actualizarDocumentos(DocumentosModel tipo) {
+        return repository.save(tipo);
+    }
+
+    public void borrarDocumentos(int id) {
+        repository.deleteById(id);
+    }
+
+    public Optional<DocumentosModel> obtenerDocumentosPorId(int id) {
+        return repository.findById(id);
     }
 }
