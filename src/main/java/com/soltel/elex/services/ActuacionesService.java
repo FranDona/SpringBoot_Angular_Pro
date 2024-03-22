@@ -7,24 +7,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ActuacionesService {
 
-    private final IActuacionesRepository actuacionesRepository;
-    
-    // Constructor para cargar el repositorio que yo he hecho
-    // Inyecto la dependencia
-    @Autowired
-    public ActuacionesService(IActuacionesRepository actuacionesRepository) {
-        this.actuacionesRepository = actuacionesRepository;
+	@Autowired
+    private IActuacionesRepository repository;
+
+    public List<ActuacionesModel> consultarActuaciones() {
+        return repository.findAll();
     }
 
-    // Creo mis propios métodos para hacer consultas
-    // findAll -> SELECT * FROM Clientes
-    // OJO! Este nombre es por convención: findAllClientes
-    public List<ActuacionesModel> findAllActuaciones() {
-        return actuacionesRepository.findAll();
+    public ActuacionesModel insertarActuaciones(ActuacionesModel tipo) {
+        return repository.save(tipo);
+    }
+
+    public ActuacionesModel actualizarActuaciones(ActuacionesModel tipo) {
+        return repository.save(tipo);
+    }
+
+    public void borrarActuaciones(int id) {
+        repository.deleteById(id);
+    }
+
+    public Optional<ActuacionesModel> obtenerActuacionesPorId(int id) {
+        return repository.findById(id);
     }
 
 }

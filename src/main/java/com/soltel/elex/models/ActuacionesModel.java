@@ -1,5 +1,7 @@
 package com.soltel.elex.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,7 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.sql.Timestamp;
 
 @Entity
@@ -24,7 +26,8 @@ public class ActuacionesModel {
 
     private boolean finalizado;
 
-    private java.sql.Date fecha;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fecha;
 
     @ManyToOne
     @JoinColumn(name = "expediente")
@@ -32,7 +35,7 @@ public class ActuacionesModel {
 
     private boolean borrado;
 
-    @Column(name = "fecha_creacion", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "fecha_creacion", nullable = true, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp fechaCreacion;
 
 
@@ -61,11 +64,11 @@ public class ActuacionesModel {
         this.finalizado = finalizado;
     }
 
-    public java.sql.Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(java.sql.Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
@@ -98,7 +101,7 @@ public class ActuacionesModel {
     public ActuacionesModel() {
     }
 
-    public ActuacionesModel(int id, String descripcion, boolean finalizado, Date fecha, ExpedientesModel expediente,
+    public ActuacionesModel(int id, String descripcion, boolean finalizado, LocalDate fecha, ExpedientesModel expediente,
             boolean borrado, Timestamp fechaCreacion) {
         this.id = id;
         this.descripcion = descripcion;
@@ -108,9 +111,4 @@ public class ActuacionesModel {
         this.borrado = borrado;
         this.fechaCreacion = fechaCreacion;
     }
-    
-
-    
-    
-    
 }
