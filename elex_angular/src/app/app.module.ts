@@ -21,6 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    // Añadimos el HttpClient y el Forms
     HttpClientModule,
     FormsModule,
   ],
