@@ -8,7 +8,7 @@ describe('FormulariosTiposComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormulariosTiposComponent]
+      declarations: [FormulariosTiposComponent]
     })
     .compileComponents();
     
