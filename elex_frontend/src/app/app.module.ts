@@ -5,20 +5,18 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormulariosTiposComponent } from './tipos-expedientes/formularios-tipos/formularios-tipos.component';
+import { FormulariosTiposComponent } from './tipos-expediente/formularios-tipos/formularios-tipos.component'; 
 
 
 // Hay que añadir estos componentes de Librerias Angular
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { FormulariosExpedientesComponent } from './expedientes/formularios-expedientes/formularios-expedientes.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    FormulariosTiposComponent,
-    FormulariosExpedientesComponent
+    FormulariosTiposComponent
   ],
   imports: [
     BrowserModule,
