@@ -11,12 +11,14 @@ import { FormulariosTiposComponent } from './tipos-expediente/formularios-tipos/
 // Hay que añadir estos componentes de Librerias Angular
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { IndexComponent } from './index/index.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    FormulariosTiposComponent
+    FormulariosTiposComponent,
+    IndexComponent
   ],
   imports: [
     BrowserModule,
