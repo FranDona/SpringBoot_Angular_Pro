@@ -1,6 +1,5 @@
 package com.soltel.elex.config;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -21,10 +20,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filtro(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> cors.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()))
             .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF
             .authorizeHttpRequests(auth -> auth
-            		.requestMatchers("/clientes/**", "/reservas/**").permitAll() 	// Permitir solicitudes a /clientes y /reservas
+                .requestMatchers(new AntPathRequestMatcher("/tipos_expediente/**")).permitAll() 
                 .anyRequest().authenticated())
             .formLogin(form -> form
                 .defaultSuccessUrl("/inicio", true));
