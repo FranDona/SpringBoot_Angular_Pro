@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 
 // Importaciones adicionales propios
 import { Tipos } from '../models/tipos.model';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../../environments/environment.development';
 
 // Importaciones adicionales de librerias Angular
 import { HttpClient } from '@angular/common/http';
