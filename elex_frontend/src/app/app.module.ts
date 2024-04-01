@@ -12,12 +12,14 @@ import { FormulariosTiposComponent } from './tipos-expediente/formularios-tipos/
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { IndexComponent } from './index/index.component';
+import { FormulariosExpedientesComponent } from './expedientes/formularios-expedientes/formularios-expedientes.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     FormulariosTiposComponent,
+    FormulariosExpedientesComponent,
     IndexComponent
   ],
   imports: [

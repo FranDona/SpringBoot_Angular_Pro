@@ -1,2 +1,2 @@
-export class Expedientes {
+export interface Expedientes {
 }
