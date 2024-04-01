@@ -1,6 +1,80 @@
+<nav>
+    <ul>
+        <li><a routerLink="/tipos">Tipos de Expedientes</a></li>
+        <li><a routerLink="/expedientes">Expedientes</a></li>
+    </ul>
+</nav>
 
+<h2>Expedientes - Angular 17!!</h2>
 
+<section class="container mt-3">
+    <form (ngSubmit)="expedienteParaActualizar ? actualizarExpediente() : insertarExpediente()">
+        <section class="mb-3">
+            <label for="codigo" class="form-label">Código</label>
+            <input type="text" class="form-control" id="codigo" [(ngModel)]="codigo" name="codigo">
+        </section>
+        <section class="mb-3">
+            <label for="fecha" class="form-label">Fecha</label>
+            <input type="date" class="form-control" id="fecha" [(ngModel)]="fecha" name="fecha">
+        </section>
+        <section class="mb-3">
+            <label for="estado" class="form-label">Estado</label>
+            <select class="form-select" id="estado" [(ngModel)]="estado" name="estado">
+                <option value="Pendiente">Pendiente</option>
+                <option value="Enviado">Enviado</option>
+                <option value="Erróneo">Erróneo</option>
+            </select>
+        </section>
+        <section class="mb-3">
+            <label for="opciones" class="form-label">Opciones</label>
+            <input type="text" class="form-control" id="opciones" [(ngModel)]="opciones" name="opciones">
+        </section>
+        <section class="mb-3">
+            <label for="descripcion" class="form-label">Descripción</label>
+            <textarea class="form-control" id="descripcion" [(ngModel)]="descripcion" name="descripcion"></textarea>
+        </section>
+        <section class="mb-3">
+            <label for="tipo" class="form-label">Tipo</label>
+            <!-- Aquí deberías tener un select o algún tipo de control para seleccionar el tipo de expediente -->
+            <input type="text" class="form-control" id="tipo" [(ngModel)]="tipo" name="tipo">
+        </section>
+        <!-- Botón para insertar un nuevo expediente -->
+        <button type="button" class="btn btn-primary" (click)="insertarExpediente()" *ngIf="!expedienteParaActualizar">Insertar</button>
 
-<p>formularios-expedientes works!</p>
+        <!-- Botones para actualizar un expediente existente -->
+        <section *ngIf="expedienteParaActualizar">
+            <button type="button" class="btn btn-warning" (click)="actualizarExpediente()">Actualizar</button>
+            <button type="button" class="btn btn-light" (click)="cancelarActualizacion()">Cancelar</button>
+        </section>
+    </form>
 
-
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Código</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Opciones</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let expediente of expedientes">
+                <td>{{ expediente.id }}</td>
+                <td>{{ expediente.codigo }}</td>
+                <td>{{ expediente.fecha }}</td>
+                <td>{{ expediente.estado }}</td>
+                <td>{{ expediente.opciones }}</td>
+                <td>{{ expediente.descripcion }}</td>
+                <td>{{ expediente.tipo }}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(expediente)">Actualizar</button>
+                    <button class="btn btn-danger btn-sm" (click)="borrarExpediente(expediente.id)">Borrar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>

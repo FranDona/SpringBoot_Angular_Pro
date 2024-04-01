@@ -2,6 +2,8 @@
 // Comando: ng generate class models/tipos --type=model
 
 export interface Tipos {
-    id: number
-    materia: string
+    id: number;
+    materia: string;
+    borrado: boolean;
+    fecha_creacion: string;
 }
