@@ -37,12 +37,18 @@ export class ExpedientesService {
 
   public getTipoNombre(idTipo: string): string {
     const tiposExpediente: { [key: string]: string } = {
-      '1': 'Tipo 1',
-      '2': 'Tipo 2',
-      '3': 'Tipo 3',
+      '1': 'Judicial',
+      '2': 'Militar',
+      '3': 'Materia3',
       // Agrega más tipos según sea necesario
     };
   
     return tiposExpediente[idTipo] || '';
   }
+
+  consultarTiposExpedientes(): Observable<string[]> {
+    const url = `${this.baseURL}/tipos`; // Suponiendo que hay un endpoint en el backend para obtener los tipos de expedientes
+    return this.http.get<string[]>(url);
+  }
+  
 }

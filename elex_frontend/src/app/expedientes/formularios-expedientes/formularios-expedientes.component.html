@@ -35,9 +35,11 @@
         </section>
         <section class="mb-3">
             <label for="tipo" class="form-label">Tipo</label>
-            <!-- Aquí deberías tener un select o algún tipo de control para seleccionar el tipo de expediente -->
-            <input type="text" class="form-control" id="tipo" [(ngModel)]="tipo" name="tipo">
-        </section>
+            <select class="form-select" id="tipo" [(ngModel)]="tipo" name="tipo">
+              <option value="---">Selecciona un tipo</option>
+              <option *ngFor="let tipo of expedientes" [value]="tipo">{{ tipo }}</option>
+            </select>
+          </section>
         <!-- Botón para insertar un nuevo expediente -->
         <button type="button" class="btn btn-primary" (click)="insertarExpediente()" *ngIf="!expedienteParaActualizar">Insertar</button>
 
