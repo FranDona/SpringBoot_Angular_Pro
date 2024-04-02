@@ -39,9 +39,52 @@ export class FormulariosDocumentosComponent implements OnInit {
     });
   }
 
+
   cargarExpedientes(): void {
     this.servicio.consultarExpedientes().subscribe(expedientes => {
       this.expedientes = expedientes;
     });
   }
+
+
+  
+
+  // Atributo tipo que usamos para actualizar
+  documentosParaActualizar: Documentos | null = null;
+
+
+  actualizarDocumentos(): void {
+    if (this.documentosParaActualizar && this.ruta && this.tasa) {
+      this.servicio.actualizarDocumentos(this.documentosParaActualizar.id, this.ruta, this.tasa).subscribe(resultado => {
+        this.mensaje = "Documento actualizado";
+        this.cargarDocumentos();
+        this.documentosParaActualizar = null;
+        this.ruta = "---";
+        this.tasa = 0;
+      })
+    }
+  }
+
+  prepararActualizacion(documento: Documentos): void {
+    this.documentosParaActualizar = documento;
+    this.ruta = documento.ruta;
+    this.tasa = documento.tasa;
+  }
+
+  cancelarActualizacion(): void {
+    this.documentosParaActualizar = null;
+    this.ruta = "---";
+    this.tasa = 0;
+  }
+
+    // Y el borrado...
+    borrarDocumentos(id: number): void {
+      if (confirm("¿Estás seguro de querer borrar este tipo?")) {
+        this.servicio.borrarDocumentos(id).subscribe(() => {
+          this.mensaje = "Documento borrado";
+          this.cargarDocumentos();
+        });
+      }
+    }
+
 }

@@ -35,14 +35,28 @@ export class DocumentosService {
     const url = `${this.baseURL}/consultar`;
     return this.http.get<Documentos[]>(url);
   }
-
-
-
-
-
+  //Consultar entidad Expedientes
   consultarExpedientes(): Observable<Expedientes[]> {
-    const url = `${this.baseURL}/expedientes`;
+    const url = `${environment.apiURL}/expedientes/consultar`; 
     return this.http.get<Expedientes[]>(url);
   }
+
+  // Actualizar documentos
+  // @PutMapping("/actualizar/{id}/{ruta}/{tasa}")
+  actualizarDocumentos(id: number, ruta: string, tasa: number): Observable<Documentos> {
+    const url = `${this.baseURL}/actualizar/${id}/${ruta}/${tasa}`;
+    return this.http.put<Documentos>(url, {});
+  }
+
+  // Borrar documentos
+  // @DeleteMapping("/borrar/{id}")
+  borrarDocumentos(id: number): Observable<void> {
+    const url = `${this.baseURL}/borrar/${id}`;
+    return this.http.delete<void>(url);
+  }
+
+
+
+
 
 }

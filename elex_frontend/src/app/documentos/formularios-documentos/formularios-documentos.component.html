@@ -24,6 +24,10 @@
               <td>{{ documento.expediente.fecha }}</td>
               <td>{{ documento.expediente.estado }}</td>
               <td>{{ documento.expediente.descripcion }}</td>
+              <td>
+                  <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(documento)">Actualizar</button>
+                  <button class="btn btn-danger btn-sm" (click)="borrarDocumentos(documento.id)">Borrar</button>
+              </td>
           </tr>
       </tbody>
   </table>
@@ -47,6 +51,13 @@
         <option *ngFor="let expediente of expedientes" [value]="expediente.id">{{ expediente.codigo }}</option>
       </select>
     </div>
-    <button type="submit" class="btn btn-primary">Insertar</button>
+    <!-- Botón para insertar un nuevo documento -->
+    <button type="submit" class="btn btn-primary" *ngIf="!documentosParaActualizar">Insertar</button>
+
+    <!-- Botones para actualizar un documento existente -->
+    <section *ngIf="documentosParaActualizar">
+        <button type="button" class="btn btn-warning" (click)="actualizarDocumentos()">Actualizar</button>
+        <button type="button" class="btn btn-light" (click)="cancelarActualizacion()">Cancelar</button>
+    </section>
   </form>
 </section>
