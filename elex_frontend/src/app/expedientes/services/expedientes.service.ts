@@ -35,10 +35,14 @@ export class ExpedientesService {
     return this.http.delete<void>(url);
   }
 
-  private getTipoNombre(idTipo: string): string {
-    // Aquí deberías implementar la lógica para obtener el nombre del tipo de expediente a partir del ID,
-    // ya sea mediante una consulta al backend o alguna otra fuente de datos
-    // Por simplicidad, asumiremos que tienes una función o un mapeo predefinido para obtener el nombre
-    return ''; // Esto es solo un placeholder, debes reemplazarlo con tu lógica real
+  public getTipoNombre(idTipo: string): string {
+    const tiposExpediente: { [key: string]: string } = {
+      '1': 'Tipo 1',
+      '2': 'Tipo 2',
+      '3': 'Tipo 3',
+      // Agrega más tipos según sea necesario
+    };
+  
+    return tiposExpediente[idTipo] || '';
   }
 }

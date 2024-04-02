@@ -69,7 +69,7 @@
                 <td>{{ expediente.estado }}</td>
                 <td>{{ expediente.opciones }}</td>
                 <td>{{ expediente.descripcion }}</td>
-                <td>{{ expediente.tipo }}</td>
+                <td>{{ servicio.getTipoNombre(expediente.tipo) }}</td>
                 <td>
                     <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(expediente)">Actualizar</button>
                     <button class="btn btn-danger btn-sm" (click)="borrarExpediente(expediente.id)">Borrar</button>

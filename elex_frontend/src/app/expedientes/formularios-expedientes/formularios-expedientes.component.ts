@@ -21,7 +21,7 @@ export class FormulariosExpedientesComponent implements OnInit {
 
   expedienteParaActualizar: Expedientes | null = null;
 
-  constructor(private servicio: ExpedientesService) {}
+  constructor(public servicio: ExpedientesService) {}
 
   ngOnInit(): void {
     this.cargarExpedientes();
@@ -99,5 +99,16 @@ export class FormulariosExpedientesComponent implements OnInit {
         this.cargarExpedientes();
       });
     }
+  }
+
+  getTipoNombre(idTipo: string): string {
+    const tiposExpediente: { [key: string]: string } = {
+      '1': 'Tipo 1',
+      '2': 'Tipo 2',
+      '3': 'Tipo 3',
+      // Agrega más tipos según sea necesario
+    };
+  
+    return tiposExpediente[idTipo] || '';
   }
 }
