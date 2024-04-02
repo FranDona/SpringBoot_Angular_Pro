@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-
 import { ExpedientesService } from '../services/expedientes.service';
 import { Expedientes } from '../models/expedientes.model';
+import { Tipos } from '../../tipos-expediente/models/tipos.model';
 
 @Component({
   selector: 'app-formularios-expedientes',
@@ -11,20 +11,20 @@ import { Expedientes } from '../models/expedientes.model';
 export class FormulariosExpedientesComponent implements OnInit {
   expedientes: Expedientes[] = [];
   mensaje: string = "";
+  tipos: Tipos[] = [];
 
   codigo: string = "";
   fecha: string = "";
   estado: 'Pendiente' | 'Enviado' | 'Erróneo' = 'Pendiente';
   opciones: string = "";
   descripcion: string = "";
-  tipo: string = "---";
-
-  expedienteParaActualizar: Expedientes | null = null;
+  tipoId: number = 0;
 
   constructor(public servicio: ExpedientesService) {}
 
   ngOnInit(): void {
     this.cargarExpedientes();
+    this.cargarTipos(); // Aquí se llama al método cargarTipos() en el ngOnInit()
   }
 
   cargarExpedientes(): void {
@@ -33,82 +33,73 @@ export class FormulariosExpedientesComponent implements OnInit {
     });
   }
 
-  insertarExpediente(): void {
-    const nuevoExpediente: Expedientes = {
-      id: 0, // El ID se generará en el backend
-      codigo: this.codigo,
-      fecha: this.fecha,
-      estado: this.estado,
-      opciones: this.opciones,
-      descripcion: this.descripcion,
-      tipo: this.tipo,
-      borrado: false, // Puedes ajustar según necesidades
-      fecha_creacion: '' // Puedes ajustar según necesidades
-    };
-
-    this.servicio.insertarExpediente(nuevoExpediente).subscribe(resultado => {
-      if(resultado) {
-        this.mensaje = "Expediente insertado";
+  insertarExpedientes(): void {
+    this.servicio.insertarExpedientes(this.codigo, this.fecha, this.estado, this.opciones, this.descripcion, this.tipoId).subscribe(resultado => {
+      if (resultado) {
+        this.mensaje = "Expediente Insertado";
         this.cargarExpedientes();
-        // Limpiar campos después de la inserción si es necesario
-        this.limpiarCampos();
       }
     });
   }
 
-  actualizarExpediente(): void {
-    if (this.expedienteParaActualizar) {
-      this.servicio.actualizarExpediente(this.expedienteParaActualizar.id, this.expedienteParaActualizar).subscribe(resultado => {
+  cargarTipos(): void {
+    this.servicio.consultarTipos().subscribe(tipos => {
+      this.tipos = tipos;
+    });
+  }
+
+    // Atributo tipo que usamos para actualizar
+  expedientesParaActualizar: Expedientes | null = null;
+
+
+  actualizarExpedientes(): void {
+    if (this.expedientesParaActualizar && this.codigo && this.fecha && this.estado && this.opciones && this.descripcion && this.tipoId) {
+      this.servicio.actualizarExpedientes(this.expedientesParaActualizar.id, this.codigo, this.fecha, this.estado, this.opciones, this.descripcion, this.tipoId).subscribe(resultado => {
         this.mensaje = "Expediente actualizado";
         this.cargarExpedientes();
-        this.expedienteParaActualizar = null;
-        this.limpiarCampos();
-      });
+        this.expedientesParaActualizar = null;
+        this.codigo  = "";
+        this.fecha  = "";
+        this.estado = "Pendiente";
+        this.opciones  = "";
+        this.descripcion  = "";
+        this.tipoId  = 0;
+      })
     }
   }
 
-  prepararActualizacion(expediente: Expedientes): void {
-    this.expedienteParaActualizar = expediente;
-    // Puedes establecer los valores de los campos en el formulario aquí si lo necesitas
-    this.codigo = expediente.codigo;
-    this.fecha = expediente.fecha;
-    this.estado = expediente.estado;
-    this.opciones = expediente.opciones;
-    this.descripcion = expediente.descripcion;
-    this.tipo = expediente.tipo;
+  prepararActualizacion(documento: Expedientes): void {
+    this.expedientesParaActualizar = documento;
+    this.codigo = documento.codigo;
+    this.fecha = documento.fecha;
+    this.estado = documento.estado;
+    this.opciones = documento.opciones;
+    this.descripcion = documento.descripcion;
+    this.tipoId = documento.tipo.id;
   }
+
 
   cancelarActualizacion(): void {
-    this.expedienteParaActualizar = null;
-    this.limpiarCampos();
+    this.expedientesParaActualizar = null;
+    this.cargarExpedientes();
+    this.expedientesParaActualizar = null;
+    this.codigo  = "";
+    this.fecha  = "";
+    this.estado = "Pendiente";
+    this.opciones  = "";
+    this.descripcion  = "";
+    this.tipoId  = 0;
   }
 
-  limpiarCampos(): void {
-    this.codigo = "";
-    this.fecha = "";
-    this.estado = 'Pendiente';
-    this.opciones = "";
-    this.descripcion = "";
-    this.tipo = "---";
-  }
-
-  borrarExpediente(id: number): void {
-    if(confirm("¿Estás seguro de querer borrar este expediente?")) {
-      this.servicio.borrarExpediente(id).subscribe(() => {
-        this.mensaje = "Expediente borrado";
-        this.cargarExpedientes();
-      });
+    // Y el borrado...
+    borrarExpedientes(id: number): void {
+      if (confirm("¿Estás seguro de querer borrar este Expediente?")) {
+        this.servicio.borrarExpedientes(id).subscribe(() => {
+          this.mensaje = "Documento borrado";
+          this.cargarExpedientes();
+        });
+      }
     }
-  }
 
-  getTipoNombre(idTipo: string): string {
-    const tiposExpediente: { [key: string]: string } = {
-      '1': 'Tipo 1',
-      '2': 'Tipo 2',
-      '3': 'Tipo 3',
-      // Agrega más tipos según sea necesario
-    };
   
-    return tiposExpediente[idTipo] || '';
-  }
 }

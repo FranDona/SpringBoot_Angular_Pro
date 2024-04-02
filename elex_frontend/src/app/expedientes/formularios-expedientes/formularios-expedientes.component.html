@@ -8,7 +8,7 @@
 <h2>Expedientes - Angular 17!!</h2>
 
 <section class="container mt-3">
-    <form (ngSubmit)="expedienteParaActualizar ? actualizarExpediente() : insertarExpediente()">
+    <form (ngSubmit)="expedientesParaActualizar ? actualizarExpedientes() : insertarExpedientes()">
         <section class="mb-3">
             <label for="codigo" class="form-label">Código</label>
             <input type="text" class="form-control" id="codigo" [(ngModel)]="codigo" name="codigo">
@@ -35,17 +35,16 @@
         </section>
         <section class="mb-3">
             <label for="tipo" class="form-label">Tipo</label>
-            <select class="form-select" id="tipo" [(ngModel)]="tipo" name="tipo">
-              <option value="---">Selecciona un tipo</option>
-              <option *ngFor="let tipo of expedientes" [value]="tipo">{{ tipo }}</option>
-            </select>
+            <select class="form-control" id="tipoId" [(ngModel)]="tipoId" name="tipoId">
+                <option *ngFor="let tipo of tipos" [value]="tipo.id">{{ tipo.materia }}</option>
+              </select>
           </section>
         <!-- Botón para insertar un nuevo expediente -->
-        <button type="button" class="btn btn-primary" (click)="insertarExpediente()" *ngIf="!expedienteParaActualizar">Insertar</button>
+        <button type="button" class="btn btn-primary" (click)="insertarExpedientes()" *ngIf="!expedientesParaActualizar">Insertar</button>
 
         <!-- Botones para actualizar un expediente existente -->
-        <section *ngIf="expedienteParaActualizar">
-            <button type="button" class="btn btn-warning" (click)="actualizarExpediente()">Actualizar</button>
+        <section *ngIf="expedientesParaActualizar">
+            <button type="button" class="btn btn-warning" (click)="actualizarExpedientes()">Actualizar</button>
             <button type="button" class="btn btn-light" (click)="cancelarActualizacion()">Cancelar</button>
         </section>
     </form>
@@ -71,10 +70,10 @@
                 <td>{{ expediente.estado }}</td>
                 <td>{{ expediente.opciones }}</td>
                 <td>{{ expediente.descripcion }}</td>
-                <td>{{ servicio.getTipoNombre(expediente.tipo) }}</td>
+                <td>{{ expediente.tipo.materia }}</td>
                 <td>
                     <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(expediente)">Actualizar</button>
-                    <button class="btn btn-danger btn-sm" (click)="borrarExpediente(expediente.id)">Borrar</button>
+                    <button class="btn btn-danger btn-sm" (click)="borrarExpedientes(expediente.id)">Borrar</button>
                 </td>
             </tr>
         </tbody>

@@ -1,11 +1,13 @@
+import { Tipos } from "../../tipos-expediente/models/tipos.model";
+
 export interface Expedientes {
   id: number;
   codigo: string;
-  fecha: string; // Puedes usar un tipo de dato para fechas según tu preferencia
+  fecha: string; 
   estado: 'Pendiente' | 'Enviado' | 'Erróneo';
   opciones: string;
   descripcion: string;
-  tipo: string; // Cambiamos el tipo de number a string
+  tipo: Tipos; 
   borrado: boolean;
-  fecha_creacion: string; // Puedes usar un tipo de dato para fechas según tu preferencia
+  fecha_creacion: string; 
 }
