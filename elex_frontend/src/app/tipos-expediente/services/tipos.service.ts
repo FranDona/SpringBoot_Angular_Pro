@@ -1,6 +1,3 @@
-// ELEX: SpringBoot3.2 + Angular17.3 -> Paso3: Servicio
-// Comando: ng generate service services/tipos
-
 import { Injectable } from '@angular/core';
 
 // Importaciones adicionales propios
@@ -9,7 +6,7 @@ import { environment } from '../../../environments/environment.development';
 
 // Importaciones adicionales de librerias Angular
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -30,15 +27,24 @@ export class TiposService {
 
   // Consultar tipos
   // @GetMapping("/consultar")
+
   consultarTipos(): Observable<Tipos[]> {
     const url = `${this.baseURL}/consultar`;
-    return this.http.get<Tipos[]>(url);
+    return this.http.get<Tipos[]>(url).pipe(
+      // Filtrar los tipos de expediente donde el campo "borrado" sea falso (0)
+      map(tipos => tipos.filter(tipo => tipo.borrado === false))
+    );
   }
 
-  // ----------------------------------------
-  // NUEVO! ACTUALIZAR Y BORRAR
-  // Paso1: Modificar el Servicio
-  // ----------------------------------------
+
+// Muestra toodos los datos
+//    consultarTipos(): Observable<Tipos[]> {
+//    const url = `${this.baseURL}/consultar`;
+//    return this.http.get<Tipos[]>(url);
+//  }
+
+
+
 
   // Actualizar tipos
   // @PutMapping("/actualizar/{id}/{materia}")
@@ -53,4 +59,10 @@ export class TiposService {
     const url = `${this.baseURL}/borrar/${id}`;
     return this.http.delete<void>(url);
   }
+
+  borradoLogicoTipo(id: number): Observable<void> {
+    const url = `${this.baseURL}/borrarLogico/${id}`;
+    return this.http.put<void>(url, {});
+  }
+  
 }

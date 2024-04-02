@@ -1,62 +1,50 @@
-// ELEX: SpringBoot3.2 + Angular17.3 -> Paso4: Controlador componente
-// Comando: ng generate component formularios-tipos
-
 import { Component, OnInit } from '@angular/core';
-
-// Importaciones propias
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { TiposService } from '../services/tipos.service';
 import { Tipos } from '../models/tipos.model';
 
-TiposService
-
 @Component({
   selector: 'app-formularios-tipos',
-  // standalone: false,
   templateUrl: './formularios-tipos.component.html',
-  styleUrl: './formularios-tipos.component.css'
+  styleUrls: ['./formularios-tipos.component.css']
 })
+export class FormulariosTiposComponent implements OnInit {
+  tipos: Tipos[] = [];
+  mensaje: string = "";
+  materia: string = "---";
+  tipoParaActualizar: Tipos | null = null;
 
-// OJO! Hay que implementar OnInit
-export class FormulariosTiposComponent implements OnInit{
-  // Atributos generales
-  tipos: Tipos[] = []         // Defino array tipos para consulta
-  mensaje: string = ""        // Mensaje para el alert
+  constructor(private servicio: TiposService, private snackBar: MatSnackBar) {}
 
-  // Propiedades del formulario
-  materia: string = "---"
+  ngOnInit(): void {
+    this.cargarTipos();
+  }
 
-  // Constructor (inyecto el servicio)
-  constructor(private servicio: TiposService) {}
-
-  // Métodos de cargar (consulta) e insertar (inserción)
   cargarTipos(): void {
     this.servicio.consultarTipos().subscribe(datos => {
-      this.tipos = datos
-    })
+      this.tipos = datos;
+    });
   }
 
   insertarTipo(): void {
-    this.servicio.insertarTipo(this.materia).subscribe(resultado => {
-      if(resultado) {
-        this.mensaje = "Tipo insertado"
-        this.cargarTipos()
+    this.servicio.insertarTipo(this.materia).subscribe(
+      resultado => {
+        if (resultado) {
+          this.mensaje = "Tipo insertado";
+          this.cargarTipos();
+        }
+      },
+      error => {
+        this.snackBar.open('Materia duplicada o usada anteriormente', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       }
-    })
+    );
   }
 
-  // Finalmente ponemos el ngOnInit
-  ngOnInit(): void {
-      this.cargarTipos()
-  }
 
-  // ----------------------------------------
-  // NUEVO! ACTUALIZAR Y BORRAR
-  // Paso2: Modificar controlador (componente)
-  // ----------------------------------------
-
-  // Atributo tipo que usamos para actualizar
-  tipoParaActualizar: Tipos | null = null;
-  
   actualizarTipoFormulario(): void {
     if (this.tipoParaActualizar && this.materia) {
       this.servicio.actualizarTipo(this.tipoParaActualizar.id, this.materia).subscribe(resultado => {
@@ -75,10 +63,9 @@ export class FormulariosTiposComponent implements OnInit{
 
   cancelarActualizacion(): void {
     this.tipoParaActualizar = null;
-    this.materia = '---'; // O el valor por defecto que prefieras
+    this.materia = '---';
   }
 
-  // Y el borrado...
   borrarTipo(id: number): void {
     if (confirm("¿Estás seguro de querer borrar este tipo?")) {
       this.servicio.borrarTipo(id).subscribe(() => {
@@ -86,5 +73,20 @@ export class FormulariosTiposComponent implements OnInit{
         this.cargarTipos();
       });
     }
+  }
+
+  borradoLogicoTipo(id: number): void {
+    if (confirm("¿Estás seguro de querer borrar lógicamente este tipo?")) {
+      this.servicio.borradoLogicoTipo(id).subscribe(() => {
+        this.mensaje = "Tipo borrado lógicamente";
+        this.cargarTipos();
+      });
+    }
+  }
+
+  private mostrarMensaje(mensaje: string): void {
+    this.snackBar.open(mensaje, 'Cerrar', {
+      duration: 3000
+    });
   }
 }

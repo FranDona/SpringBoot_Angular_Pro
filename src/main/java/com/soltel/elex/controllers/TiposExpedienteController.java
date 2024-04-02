@@ -27,13 +27,19 @@ public class TiposExpedienteController {
     public List<TiposExpedienteModel> dameTiposExpediente() {
         return servicioTipo.consultarTipos();
     }
-
     @PostMapping("/insertar/{materia}")
-    public TiposExpedienteModel insertarTipo(@PathVariable String materia) {
-        TiposExpedienteModel tipo = new TiposExpedienteModel();
-        tipo.setMateria(materia);
-        return servicioTipo.insertarTipo(tipo);
+    public ResponseEntity<?> insertarTipo(@PathVariable String materia) {
+    // Verifica si la materia ya existe en la base de datos
+    boolean materiaExiste = servicioTipo.existeMateria(materia);
+    if (materiaExiste) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("La materia ya existe"); // Devuelve 409 si la materia ya existe
     }
+    
+    // Si la materia no existe, procede con la inserción normalmente
+    TiposExpedienteModel tipo = new TiposExpedienteModel();
+    tipo.setMateria(materia);
+    return ResponseEntity.ok(servicioTipo.insertarTipo(tipo));
+}
 
     @PutMapping("/actualizar/{id}/{materia}")
     public ResponseEntity<?> actualizarTipo(@PathVariable int id, @PathVariable String materia) {
@@ -58,4 +64,20 @@ public class TiposExpedienteController {
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/borrarLogico/{id}")
+    public ResponseEntity<?> borrarLogicoTipo(@PathVariable int id) {
+    Optional<TiposExpedienteModel> tipo = servicioTipo.obtenerTipoPorId(id);
+    if (tipo.isPresent()) {
+        TiposExpedienteModel tipoActualizado = tipo.get();
+        tipoActualizado.setBorrado(true);
+        TiposExpedienteModel guardaTipo = servicioTipo.actualizarTipo(tipoActualizado);
+        return ResponseEntity.ok(guardaTipo);
+    } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tipo no encontrado");
+    }
+
+    }
+    
+
 }

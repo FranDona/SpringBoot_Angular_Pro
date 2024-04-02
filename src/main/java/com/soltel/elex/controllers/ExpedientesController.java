@@ -116,4 +116,5 @@ public class ExpedientesController {
             return ResponseEntity.notFound().build();
         }
     }
+
 }
