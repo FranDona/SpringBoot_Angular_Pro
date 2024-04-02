@@ -1,1 +1,52 @@
-<p>formularios-documentos works!</p>
+<h2>Documentos - Angular 17!!</h2>
+
+<section class="container mt-3">
+  <!-- Aquí va tu tabla para mostrar los documentos -->
+  <table class="table mt-3">
+      <thead>
+          <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Ruta pdf</th>
+              <th scope="col">Precio</th>
+              <th scope="col">Código del expediente</th>
+              <th scope="col">Fecha del expediente</th>
+              <th scope="col">Estado del expediente</th>
+              <th scope="col">Descripción del expediente</th>
+          </tr>
+      </thead>
+      <!-- Modifico la tabla para añadir los botones adicionales -->
+      <tbody>
+          <tr *ngFor="let documento of documentos">
+              <td>{{ documento.id }}</td>
+              <td>{{ documento.ruta }}</td>
+              <td>{{ documento.tasa }}</td>
+              <td>{{ documento.expediente.codigo }}</td>
+              <td>{{ documento.expediente.fecha }}</td>
+              <td>{{ documento.expediente.estado }}</td>
+              <td>{{ documento.expediente.descripcion }}</td>
+          </tr>
+      </tbody>
+  </table>
+</section>
+
+<!-- Agregamos el formulario -->
+<section class="container mt-3">
+  <h3>Insertar Documento</h3>
+  <form (ngSubmit)="insertarDocumentos()">
+    <div class="form-group">
+      <label for="ruta">Ruta PDF:</label>
+      <input type="text" class="form-control" id="ruta" [(ngModel)]="ruta" name="ruta">
+    </div>
+    <div class="form-group">
+      <label for="tasa">Precio:</label>
+      <input type="number" class="form-control" id="tasa" [(ngModel)]="tasa" name="tasa">
+    </div>
+    <div class="form-group">
+      <label for="expedienteId">ID del Expediente:</label>
+      <select class="form-control" id="expedienteId" [(ngModel)]="expedienteId" name="expedienteId">
+        <option *ngFor="let expediente of expedientes" [value]="expediente.id">{{ expediente.codigo }}</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Insertar</button>
+  </form>
+</section>
