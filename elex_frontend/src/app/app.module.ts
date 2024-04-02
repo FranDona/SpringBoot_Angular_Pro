@@ -13,6 +13,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { IndexComponent } from './index/index.component';
 import { FormulariosExpedientesComponent } from './expedientes/formularios-expedientes/formularios-expedientes.component';
+import { FormulariosDocumentosComponent } from './documentos/formularios-documentos/formularios-documentos.component';
+import { FormulariosActuacionesComponent } from './actuaciones/formularios-actuaciones/formularios-actuaciones.component';
 
 
 @NgModule({
@@ -20,7 +22,9 @@ import { FormulariosExpedientesComponent } from './expedientes/formularios-exped
     AppComponent,
     FormulariosTiposComponent,
     FormulariosExpedientesComponent,
-    IndexComponent
+    IndexComponent,
+    FormulariosDocumentosComponent,
+    FormulariosActuacionesComponent
   ],
   imports: [
     BrowserModule,
