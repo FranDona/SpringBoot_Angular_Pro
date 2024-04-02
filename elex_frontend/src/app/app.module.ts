@@ -20,7 +20,6 @@ import { FormulariosActuacionesComponent } from './actuaciones/formularios-actua
 import { FormulariosDocumentosComponent } from './documentos/formularios-documentos/formularios-documentos.component';
 
 
-
 @NgModule({
   declarations: [
     AppComponent,

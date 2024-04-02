@@ -1,1 +1,72 @@
-<p>formularios-actuaciones works!</p>
+<h2>Actuaciones</h2>
+
+<section class="container mt-3">
+  <!-- Aquí va tu tabla para mostrar las actuaciones -->
+  <table class="table mt-3">
+      <thead>
+          <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Descripcion</th>
+              <th scope="col">Finalizado</th>
+              <th scope="col">Apertura de Actuacion</th>
+              <th scope="col">Codigo Expediente</th>
+              <th scope="col">Apertura del expediente</th>
+              <th scope="col">Estado</th>
+              <th scope="col"></th>
+          </tr>
+      </thead>
+      <!-- Modifico la tabla para añadir los botones adicionales -->
+      <tbody>
+          <tr *ngFor="let actuacion of actuaciones">
+              <td>{{ actuacion.id }}</td>
+              <td>{{ actuacion.descripcion }}</td>
+              <td>{{ actuacion.finalizado }}</td>
+              <td>{{ actuacion.fecha }}</td>
+              <td>{{ actuacion.expediente.codigo }}</td>
+              <td>{{ actuacion.expediente.fecha }}</td>
+              <td>{{ actuacion.expediente.estado }}</td>
+              <td>
+                  <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(actuacion)">Actualizar</button>
+                  <button class="btn btn-danger btn-sm" (click)="borrarActuaciones(actuacion.id)">Borrar</button>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+</section>
+
+<!-- Agregamos el formulario -->
+<section class="container mt-3">
+  <h3>Insertar Actuación</h3>
+  <form (ngSubmit)="insertarActuaciones()">
+    <div class="form-group">
+      <label for="descripcion">Descripcion de la actuacion</label>
+      <input type="text" class="form-control" id="descripcion" [(ngModel)]="descripcion" name="descripcion">
+    </div>
+    <div class="form-group">
+      <label for="tasa">Precio:</label>
+      <input type="text" class="form-control" id="tasa" [(ngModel)]="finalizado" name="tasa">
+    </div>
+    <div class="form-group">
+        <label for="tasa">Precio:</label>
+        <input type="date" class="form-control" id="tasa" [(ngModel)]="fecha" name="tasa">
+      </div>
+      <div class="form-group">
+        <label for="tasa">Precio:</label>
+        <input type="number" class="form-control" id="tasa" [(ngModel)]="expedienteId" name="tasa">
+      </div>
+    <div class="form-group">
+      <label for="expedienteId">ID del Expediente:</label>
+      <select class="form-control" id="expedienteId" [(ngModel)]="expedienteId" name="expedienteId">
+        <option *ngFor="let expediente of expedientes" [value]="expediente.id">{{ expediente.codigo }}</option>
+      </select>
+    </div>
+    <!-- Botón para insertar una nueva actuación -->
+    <button type="submit" class="btn btn-primary" *ngIf="!actuacionesParaActualizar">Insertar</button>
+
+    <!-- Botones para actualizar una actuación existente -->
+    <section *ngIf="actuacionesParaActualizar">
+        <button type="button" class="btn btn-warning" (click)="actualizarActuaciones()">Actualizar</button>
+        <button type="button" class="btn btn-light" (click)="cancelarActualizacion()">Cancelar</button>
+    </section>
+  </form>
+</section>
