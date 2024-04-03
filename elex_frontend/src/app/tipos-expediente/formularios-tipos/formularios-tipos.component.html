@@ -33,7 +33,6 @@
                 <td>{{ tipo.materia }}</td>
                 <td>
                     <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(tipo)">Actualizar</button>
-                    <button class="btn btn-danger btn-sm" (click)="borrarTipo(tipo.id)">Borrar</button>
                     <button class="btn btn-danger btn-sm" (click)="borradoLogicoTipo(tipo.id)">Borrado Logico</button>
                 </td>
             </tr>
@@ -56,7 +55,8 @@
         <td>{{ tipo.id }}</td>
         <td>{{ tipo.materia }}</td>
         <td>
-          <!-- Aquí van los botones de acción para los tipos borrados -->
+          <button class="btn btn-info btn-sm" (click)="recuperarTipo(tipo.id)">Recuperar</button>
+          <button class="btn btn-danger btn-sm" (click)="borrarTipo(tipo.id)">Borrar Definitivamente</button>
         </td>
       </tr>
     </tbody>

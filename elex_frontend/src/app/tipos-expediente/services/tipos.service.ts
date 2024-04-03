@@ -64,10 +64,16 @@ export class TiposService {
   }
 
   // Borrado Logico tipos
-  // @DeleteMapping("/borrarLogico/{id}")
+  // @PutMapping("/borrarLogico/{id}")
   borradoLogicoTipo(id: number): Observable<void> {
     const url = `${this.baseURL}/borrarLogico/${id}`;
     return this.http.put<void>(url, {});
   }
-  
+
+  // Recuperacion tipos
+  // @PutMapping("/recuperarTipo/{id}")
+  recuperarTipo(id: number): Observable<void> {
+    const url = `${this.baseURL}/recuperarTipo/${id}`;
+    return this.http.put<void>(url, {});
+  }
 }

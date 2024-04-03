@@ -86,6 +86,34 @@ public class TiposExpedienteController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tipo de expediente no encontrado");
         }
     }
+
+    @PutMapping("/recuperarTipo/{id}")
+    public ResponseEntity<?> recuperarTipo(@PathVariable int id) {
+        // Verificar si el tipo de expediente existente está presente en la base de datos
+        Optional<TiposExpedienteModel> tipoOptional = servicioTipo.obtenerTipoPorId(id);
+        if (tipoOptional.isPresent()) {
+            // Obtener el tipo de expediente
+            TiposExpedienteModel tipo = tipoOptional.get();
+            
+            // Verificar si el tipo de expediente ya está recuperado (borrado = false)
+            if (!tipo.isBorrado()) {
+                return ResponseEntity.badRequest().body("El tipo de expediente ya está recuperado");
+            }
+            
+            // Establecer el atributo 'borrado' en false para indicar que el tipo de expediente ha sido recuperado
+            tipo.setBorrado(false);
+            
+            // Actualizar el tipo de expediente en el servicio para reflejar la recuperación
+            TiposExpedienteModel tipoRecuperado = servicioTipo.actualizarTipo(tipo);
+            
+            // Devolver la respuesta con el tipo de expediente actualizado
+            return ResponseEntity.ok(tipoRecuperado);
+        } else {
+            // Si el tipo de expediente no se encuentra, devolver una respuesta 404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tipo de expediente no encontrado");
+        }
+    }
+
     
     
 

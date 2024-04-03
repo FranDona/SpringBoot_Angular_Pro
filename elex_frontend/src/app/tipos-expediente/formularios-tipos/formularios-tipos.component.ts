@@ -82,21 +82,41 @@ export class FormulariosTiposComponent implements OnInit {
   }
 
   borrarTipo(id: number): void {
-    if (confirm("¿Estás seguro de querer borrar este tipo?")) {
+    if (confirm("¿Estás seguro de querer borrar definitivamente este tipo?")) {
       this.servicio.borrarTipo(id).subscribe(() => {
-        this.mensaje = "Tipo borrado";
-        this.cargarTipos();
+        this.mensaje = "Tipo borrado definitivamente";
+        this.cargarTiposBorrados(); // Actualiza la lista de tipos borrados
       });
     }
   }
+  
 
   borradoLogicoTipo(id: number): void {
     if (confirm("¿Estás seguro de querer borrar lógicamente este tipo?")) {
       this.servicio.borradoLogicoTipo(id).subscribe(() => {
-        this.mensaje = "Tipo borrado lógicamente";
-        this.cargarTipos();
+        this.snackBar.open('Tipo borrado lógicamente', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
+        // Eliminar el tipo del arreglo tipos después de realizar el borrado lógico
+        this.tipos = this.tipos.filter(tipo => tipo.id !== id);
+        // Vuelve a cargar la lista de tipos borrados después de realizar el borrado lógico
+        this.cargarTiposBorrados();
       });
     }
   }
 
+  recuperarTipo(id: number): void {
+    // Recuperar un tipo borrado
+    this.servicio.recuperarTipo(id).subscribe(() => {
+      this.snackBar.open('Tipo recuperado correctamente', 'Cerrar', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
+      // Vuelve a cargar la lista de tipos borrados después de la recuperación
+      this.cargarTiposBorrados();
+    });
+  }
 }

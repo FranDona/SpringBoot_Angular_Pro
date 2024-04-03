@@ -33,7 +33,7 @@ public class TiposExpedienteService {
         return repository.findById(id);
     }
 
-    // Nuevo método para actualizar lógicamente el campo borrado a true
+    // Método para actualizar lógicamente el campo borrado a true
     public TiposExpedienteModel borrarLogicoTipo(int id) {
         Optional<TiposExpedienteModel> tipoOptional = repository.findById(id);
         if (tipoOptional.isPresent()) {
@@ -44,6 +44,22 @@ public class TiposExpedienteService {
             return null; // Manejar el caso si el tipo no se encuentra
         }
     }
+
+        // Método para recuperar lógicamente el campo borrado a false
+        public TiposExpedienteModel recuperarTipo(int id) {
+            Optional<TiposExpedienteModel> tipoOptional = repository.findById(id);
+            if (tipoOptional.isPresent()) {
+                TiposExpedienteModel tipo = tipoOptional.get();
+                // Verificar si el tipo ya está recuperado (borrado = false)
+                if (!tipo.isBorrado()) {
+                    return null; // Manejar el caso si el tipo ya está recuperado
+                }
+                tipo.setBorrado(false); // Actualiza el campo borrado a false
+                return repository.save(tipo); // Guarda el tipo actualizado en la base de datos
+            } else {
+                return null; // Manejar el caso si el tipo no se encuentra
+            }
+        }
 
     public boolean existeMateria(String materia) {
         return repository.existsByMateria(materia);
