@@ -35,4 +35,8 @@ public class ActuacionesService {
         return repository.findById(id);
     }
 
+    public boolean existeActuacion(String descripcion) {
+        return repository.existsByDescripcion(descripcion);
+    }
+
 }

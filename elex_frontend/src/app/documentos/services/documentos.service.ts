@@ -1,6 +1,3 @@
-// ELEX: SpringBoot3.2 + Angular17.3 -> Paso3: Servicio
-// Comando: ng generate service services/documentos
-
 import { Injectable } from '@angular/core';
 
 // Importaicones propias
@@ -10,7 +7,7 @@ import { Expedientes } from '../../expedientes/models/expedientes.model';
 
 // Importaciones adicionales de librerias Angular
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 
 @Injectable({
@@ -34,7 +31,10 @@ export class DocumentosService {
   // @GetMapping("/consultar")
   consultarDocumentos(): Observable<Documentos[]> {
     const url = `${this.baseURL}/consultar`;
-    return this.http.get<Documentos[]>(url);
+    return this.http.get<Documentos[]>(url).pipe(
+      // Filtrar los tipos de expediente donde el campo "borrado" sea falso (0)
+      map(documentos => documentos.filter(documento => documento.borrado === false))
+    );
   }
   //Consultar entidad Expedientes
   consultarExpedientes(): Observable<Expedientes[]> {
@@ -56,8 +56,19 @@ export class DocumentosService {
     return this.http.delete<void>(url);
   }
 
+  // Borrado Logico documentos
+  // @DeleteMapping("/borrarLogico/{id}")
+  borradoLogicoDocumentos(id: number): Observable<void> {
+    const url = `${this.baseURL}/borrarLogico/${id}`;
+    return this.http.put<void>(url, {});
+  }
 
 
+  // Consulta general con todos los datos
+  //consultarDocumentos(): Observable<Documentos[]> {
+  //  const url = `${this.baseURL}/consultar`;
+  //  return this.http.get<Documentos[]>(url);
+  //}
 
 
 }

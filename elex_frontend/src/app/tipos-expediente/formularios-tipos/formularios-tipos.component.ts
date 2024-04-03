@@ -89,9 +89,4 @@ export class FormulariosTiposComponent implements OnInit {
     }
   }
 
-  private mostrarMensaje(mensaje: string): void {
-    this.snackBar.open(mensaje, 'Cerrar', {
-      duration: 3000
-    });
-  }
 }

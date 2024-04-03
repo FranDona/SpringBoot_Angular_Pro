@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IActuacionesRepository extends JpaRepository<ActuacionesModel, Integer> {
+    boolean existsByDescripcion(String descripcion);
 }

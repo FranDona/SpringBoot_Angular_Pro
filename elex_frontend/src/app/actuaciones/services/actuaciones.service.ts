@@ -7,7 +7,7 @@ import { Expedientes } from '../../expedientes/models/expedientes.model';
 
 // Importaciones adicionales de librerias Angular
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 
 @Injectable({
@@ -30,7 +30,10 @@ export class ActuacionesService {
   // @GetMapping("/consultar")
   consultarActuaciones(): Observable<Actuaciones[]> {
     const url = `${this.baseURL}/consultar`;
-    return this.http.get<Actuaciones[]>(url);
+    return this.http.get<Actuaciones[]>(url).pipe(
+      // Filtrar los tipos de expediente donde el campo "borrado" sea falso (0)
+      map(actuaciones => actuaciones.filter(actuacion => actuacion.borrado === false))
+    );
   }
   //Consultar entidad Expedientes
   consultarExpedientes(): Observable<Expedientes[]> {
@@ -52,5 +55,20 @@ export class ActuacionesService {
     return this.http.delete<void>(url);
   }
 
+  // Borrado Logico actuaciones
+  // @DeleteMapping("/borrarLogico/{id}")
+  borradoLogicoActuaciones(id: number): Observable<void> {
+    const url = `${this.baseURL}/borrarLogico/${id}`;
+    return this.http.put<void>(url, {});
+  }
+
   
 }
+
+
+
+// Consulta para ver todas las actuaciones
+//consultarActuaciones(): Observable<Actuaciones[]> {
+//  const url = `${this.baseURL}/consultar`;
+//  return this.http.get<Actuaciones[]>(url);
+//}

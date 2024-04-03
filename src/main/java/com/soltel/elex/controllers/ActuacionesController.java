@@ -33,10 +33,16 @@ public class ActuacionesController {
     }
 
     @PostMapping("/insertar/{descripcion}/{finalizado}/{fecha}/{expedienteId}")
-    public ResponseEntity<ActuacionesModel> insertarActuaciones(@PathVariable String descripcion,
-                                                                 @PathVariable boolean finalizado,
-                                                                 @PathVariable LocalDate fecha,
-                                                                 @PathVariable int expedienteId) {
+    public ResponseEntity<?> insertarActuacion(@PathVariable String descripcion,
+                                                @PathVariable boolean finalizado,
+                                                @PathVariable LocalDate fecha,
+                                                @PathVariable int expedienteId) {
+    
+        // Verificar si la actuación ya existe en la base de datos
+        boolean actuacionExiste = actuacionesService.existeActuacion(descripcion);
+        if (actuacionExiste) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("La actuación ya existe"); // Devuelve 409 si la actuación ya existe
+        }
     
         // Obtener el expediente correspondiente desde el servicio de expedientes
         Optional<ExpedientesModel> expedienteOptional = expedientesService.obtenerExpedientesPorId(expedienteId);
@@ -59,6 +65,7 @@ public class ActuacionesController {
         // Retornar la respuesta con la nueva actuación insertada y el código de estado 201 CREATED
         return new ResponseEntity<>(actuacionInsertada, HttpStatus.CREATED);
     }
+    
     
 
     @PutMapping("/actualizar/{id}")
@@ -85,4 +92,26 @@ public class ActuacionesController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    //Agregamos endpoint para el borrado lógico de actuaciones
+    @PutMapping("/borrarLogico/{id}")
+    public ResponseEntity<?> borrarLogicoActuacion(@PathVariable int id) {
+        // Verificar si la actuación existente está presente en la base de datos
+        Optional<ActuacionesModel> actuacion = actuacionesService.obtenerActuacionesPorId(id);
+        if (actuacion.isPresent()) {
+            // Establecer el atributo 'borrado' en true para indicar que la actuación ha sido borrada lógicamente
+            ActuacionesModel actuacionActualizada = actuacion.get();
+            actuacionActualizada.setBorrado(true);
+            
+            // Actualizar la actuación en el servicio para reflejar el borrado lógico
+            ActuacionesModel actuacionGuardada = actuacionesService.actualizarActuaciones(actuacionActualizada);
+            
+            // Devolver la respuesta con la actuación actualizada
+            return ResponseEntity.ok(actuacionGuardada);
+        } else {
+            // Si la actuación no se encuentra, devolver una respuesta 404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Actuación no encontrada");
+        }
+}
+
 }

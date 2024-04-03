@@ -40,35 +40,42 @@ public class ExpedientesController {
     }
 
     @PostMapping("/insertar/{codigo}/{fecha}/{estado}/{opciones}/{descripcion}/{tipoId}")
-    public ResponseEntity<ExpedientesModel> insertarExpediente(@PathVariable String codigo,
-                                                                @PathVariable LocalDate fecha,
-                                                                @PathVariable String estado,
-                                                                @PathVariable String opciones,
-                                                                @PathVariable String descripcion,
-                                                                @PathVariable int tipoId) {
-        // Obtener el objeto TiposExpedienteModel correspondiente al tipoId
-        Optional<TiposExpedienteModel> tipoExpedienteOptional = tiposExpedienteService.obtenerTipoPorId(tipoId);
-        if (!tipoExpedienteOptional.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-    
-        TiposExpedienteModel tipoExpediente = tipoExpedienteOptional.get();
-    
-        // Crear un nuevo objeto ExpedientesModel
-        ExpedientesModel nuevoExpediente = new ExpedientesModel();
-        nuevoExpediente.setCodigo(codigo);
-        nuevoExpediente.setFecha(fecha);
-        nuevoExpediente.setEstado(estado);
-        nuevoExpediente.setOpciones(opciones);
-        nuevoExpediente.setDescripcion(descripcion);
-        nuevoExpediente.setTipo(tipoExpediente);
-    
-        // Insertar el nuevo expediente en el servicio
-        ExpedientesModel expedienteInsertado = expedientesService.insertarExpedientes(nuevoExpediente);
-    
-        // Retornar la respuesta con el nuevo expediente insertado y el código de estado 201 CREATED
-        return new ResponseEntity<>(expedienteInsertado, HttpStatus.CREATED);
+public ResponseEntity<ExpedientesModel> insertarExpediente(@PathVariable String codigo,
+                                                            @PathVariable LocalDate fecha,
+                                                            @PathVariable String estado,
+                                                            @PathVariable String opciones,
+                                                            @PathVariable String descripcion,
+                                                            @PathVariable int tipoId) {
+    // Verificar si el código del expediente ya existe en la base de datos
+    boolean codigoExiste = expedientesService.existeExpedientePorCodigo(codigo);
+    if (codigoExiste) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).build(); // Devuelve 409 si el código del expediente ya existe
     }
+    
+    // Obtener el objeto TiposExpedienteModel correspondiente al tipoId
+    Optional<TiposExpedienteModel> tipoExpedienteOptional = tiposExpedienteService.obtenerTipoPorId(tipoId);
+    if (!tipoExpedienteOptional.isPresent()) {
+        return ResponseEntity.notFound().build(); // Devuelve 404 si el tipo de expediente no se encuentra
+    }
+
+    TiposExpedienteModel tipoExpediente = tipoExpedienteOptional.get();
+
+    // Crear un nuevo objeto ExpedientesModel
+    ExpedientesModel nuevoExpediente = new ExpedientesModel();
+    nuevoExpediente.setCodigo(codigo);
+    nuevoExpediente.setFecha(fecha);
+    nuevoExpediente.setEstado(estado);
+    nuevoExpediente.setOpciones(opciones);
+    nuevoExpediente.setDescripcion(descripcion);
+    nuevoExpediente.setTipo(tipoExpediente);
+
+    // Insertar el nuevo expediente en el servicio
+    ExpedientesModel expedienteInsertado = expedientesService.insertarExpedientes(nuevoExpediente);
+
+    // Retornar la respuesta con el nuevo expediente insertado y el código de estado 201 CREATED
+    return new ResponseEntity<>(expedienteInsertado, HttpStatus.CREATED);
+    }
+
     
     @PutMapping("/actualizar/{id}/{codigo}/{fecha}/{estado}/{opciones}/{descripcion}/{tipoId}")
     public ResponseEntity<ExpedientesModel> actualizarExpediente(@PathVariable int id,
@@ -116,5 +123,28 @@ public class ExpedientesController {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+    //Agragamos endpoint para el borrado lógico
+    @PutMapping("/borrarLogico/{id}")
+    public ResponseEntity<?> borrarLogicoExpediente(@PathVariable int id) {
+        // Verificar si el expediente existente está presente en la base de datos
+        Optional<ExpedientesModel> expediente = expedientesService.obtenerExpedientesPorId(id);
+        if (expediente.isPresent()) {
+            // Establecer el atributo 'borrado' en true para indicar que el expediente ha sido borrado lógicamente
+            ExpedientesModel expedienteActualizado = expediente.get();
+            expedienteActualizado.setBorrado(true);
+            
+            // Actualizar el expediente en el servicio para reflejar el borrado lógico
+            ExpedientesModel expedienteGuardado = expedientesService.actualizarExpediente(expedienteActualizado);
+            
+            // Devolver la respuesta con el expediente actualizado
+            return ResponseEntity.ok(expedienteGuardado);
+        } else {
+            // Si el expediente no se encuentra, devolver una respuesta 404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Expediente no encontrado");
+        }
+    }
+
 
 }

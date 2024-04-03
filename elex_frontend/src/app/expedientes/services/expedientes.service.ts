@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment.development';
 
 // Importaciones adicionales de librerias Angular
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Tipos } from '../../tipos-expediente/models/tipos.model';
 
 @Injectable({
@@ -30,8 +30,12 @@ export class ExpedientesService {
   // @GetMapping("/consultar")
   consultarExpedientes(): Observable<Expedientes[]> {
     const url = `${this.baseURL}/consultar`;
-    return this.http.get<Expedientes[]>(url);
-  }
+    return this.http.get<Expedientes[]>(url).pipe(
+      // Filtrar los tipos de expediente donde el campo "borrado" sea falso (0)
+      map(expedientes => expedientes.filter(expediente => expediente.borrado === false))
+    );
+    }
+  
   // Consultar entidad TiposExpedientes
   consultarTipos(): Observable<Tipos[]> {
     const url = `${environment.apiURL}/tipos_expediente/consultar`; 
@@ -50,5 +54,12 @@ export class ExpedientesService {
   borrarExpedientes(id: number): Observable<void> {
     const url = `${this.baseURL}/borrar/${id}`;
     return this.http.delete<void>(url);
+  }
+
+  // Borrado Logico expedientes
+  // @DeleteMapping("/borrarLogico/{id}")
+  borradoLogicoExpedientes(id: number): Observable<void> {
+    const url = `${this.baseURL}/borrarLogico/${id}`;
+    return this.http.put<void>(url, {});
   }
 }

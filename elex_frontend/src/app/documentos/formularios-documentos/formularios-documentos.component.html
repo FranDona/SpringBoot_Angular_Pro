@@ -19,7 +19,7 @@
           <tr *ngFor="let documento of documentos">
               <td>{{ documento.id }}</td>
               <td>{{ documento.ruta }}</td>
-              <td>{{ documento.tasa }}</td>
+              <td>{{ documento.tasa }}€</td>
               <td>{{ documento.expediente.codigo }}</td>
               <td>{{ documento.expediente.fecha }}</td>
               <td>{{ documento.expediente.estado }}</td>
@@ -27,6 +27,7 @@
               <td>
                   <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(documento)">Actualizar</button>
                   <button class="btn btn-danger btn-sm" (click)="borrarDocumentos(documento.id)">Borrar</button>
+                  <button class="btn btn-danger btn-sm" (click)="borradoLogicoDocumentos(documento.id)">Borrado Logico</button>
               </td>
           </tr>
       </tbody>

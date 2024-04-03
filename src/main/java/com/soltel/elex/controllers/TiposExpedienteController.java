@@ -40,7 +40,7 @@ public class TiposExpedienteController {
     TiposExpedienteModel tipo = new TiposExpedienteModel();
     tipo.setMateria(materia);
     return ResponseEntity.ok(servicioTipo.insertarTipo(tipo));
-}
+    }
 
     @PutMapping("/actualizar/{id}/{materia}")
     public ResponseEntity<?> actualizarTipo(@PathVariable int id, @PathVariable String materia) {
@@ -69,17 +69,24 @@ public class TiposExpedienteController {
     //Agragamos endpoint para el borrado lógico
     @PutMapping("/borrarLogico/{id}")
     public ResponseEntity<?> borrarLogicoTipo(@PathVariable int id) {
-    Optional<TiposExpedienteModel> tipo = servicioTipo.obtenerTipoPorId(id);
-    if (tipo.isPresent()) {
-        TiposExpedienteModel tipoActualizado = tipo.get();
-        tipoActualizado.setBorrado(true);
-        TiposExpedienteModel guardaTipo = servicioTipo.actualizarTipo(tipoActualizado);
-        return ResponseEntity.ok(guardaTipo);
-    } else {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tipo no encontrado");
+        // Verificar si el tipo de expediente existente está presente en la base de datos
+        Optional<TiposExpedienteModel> tipo = servicioTipo.obtenerTipoPorId(id);
+        if (tipo.isPresent()) {
+            // Establecer el atributo 'borrado' en true para indicar que el tipo de expediente ha sido borrado lógicamente
+            TiposExpedienteModel tipoActualizado = tipo.get();
+            tipoActualizado.setBorrado(true);
+            
+            // Actualizar el tipo de expediente en el servicio para reflejar el borrado lógico
+            TiposExpedienteModel tipoGuardado = servicioTipo.actualizarTipo(tipoActualizado);
+            
+            // Devolver la respuesta con el tipo de expediente actualizado
+            return ResponseEntity.ok(tipoGuardado);
+        } else {
+            // Si el tipo de expediente no se encuentra, devolver una respuesta 404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tipo de expediente no encontrado");
+        }
     }
-
-    }
+    
     
 
 }

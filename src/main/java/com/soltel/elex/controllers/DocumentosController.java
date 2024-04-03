@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Timestamp;
@@ -94,4 +95,34 @@ public class DocumentosController {
             return ResponseEntity.notFound().build();
         }
     }
+
+   //Agregamos endpoint para el borrado lógico de documentos
+    //Agregamos endpoint para el borrado lógico de documentos
+    @PutMapping("/borrarLogico/{id}")
+    public ResponseEntity<?> borrarLogicoDocumentos(@PathVariable int id) {
+    // Verificar si el documento existente está presente en el expediente específico
+    boolean documentoEnExpediente = documentosService.existeDocumentoEnExpediente(id);
+    if (documentoEnExpediente) {
+        // Obtener el documento correspondiente desde el servicio
+        Optional<DocumentosModel> documentoOptional = documentosService.obtenerDocumentosPorId(id);
+        if (documentoOptional.isPresent()) {
+            // Establecer el atributo 'borrado' en true para indicar que el documento ha sido borrado lógicamente
+            DocumentosModel documentoActualizado = documentoOptional.get();
+            documentoActualizado.setBorrado(true);
+            
+            // Actualizar el documento en el servicio para reflejar el borrado lógico
+            DocumentosModel documentoGuardado = documentosService.actualizarDocumentos(documentoActualizado);
+            
+            // Devolver la respuesta con el documento actualizado
+            return ResponseEntity.ok(documentoGuardado);
+        } else {
+            // Si el documento no se encuentra, devolver una respuesta 404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Documento no encontrado");
+        }
+    } else {
+        // Si el documento no pertenece al expediente específico, devolver una respuesta 404 Not Found
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El documento no pertenece al expediente");
+    }
+}
+
 }

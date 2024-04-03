@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+
+// Importacion de Angular Material
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { DocumentosService } from '../services/documentos.service';
 import { Documentos } from '../models/documentos.model';
 import { Expedientes } from '../../expedientes/models/expedientes.model';
@@ -17,7 +21,8 @@ export class FormulariosDocumentosComponent implements OnInit {
   tasa: number = 0;
   expedienteId: number = 0;
 
-  constructor(private servicio: DocumentosService) {}
+  // Inyectar "private snackBar: MatSnackBar para Angular Material
+  constructor(private servicio: DocumentosService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.cargarDocumentos();
@@ -31,13 +36,24 @@ export class FormulariosDocumentosComponent implements OnInit {
   }
 
   insertarDocumentos(): void {
-    this.servicio.insertarDocumentos(this.ruta, this.tasa, this.expedienteId).subscribe(resultado => {
-      if (resultado) {
-        this.mensaje = "Documento Insertado";
-        this.cargarDocumentos();
+    this.servicio.insertarDocumentos(this.ruta, this.tasa, this.expedienteId).subscribe(
+      resultado => {
+        if (resultado) {
+          this.mensaje = "Documento Insertado";
+          this.cargarDocumentos();
+        }
+      },
+      // Mensaje de Angular Material en caso de error
+      error => {
+        this.snackBar.open('Error al insertar el documento', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       }
-    });
+    );
   }
+  
 
 
   cargarExpedientes(): void {
@@ -86,5 +102,27 @@ export class FormulariosDocumentosComponent implements OnInit {
         });
       }
     }
+
+    borradoLogicoDocumentos(id: number): void {
+      if (confirm("¿Estás seguro de querer borrar lógicamente este documento?")) {
+        this.servicio.borradoLogicoDocumentos(id).subscribe(
+          () => {
+            this.mensaje = "Documento borrado lógicamente";
+            this.cargarDocumentos();
+          },
+          (error) => {
+            console.error("Error al intentar borrar lógicamente el documento:", error);
+            // Aquí puedes manejar el error como desees, por ejemplo, mostrando un mensaje de error
+            this.snackBar.open('Error al borrar el documento', 'Cerrar', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
+          }
+        );
+      }
+    }
+    
+    
 
 }

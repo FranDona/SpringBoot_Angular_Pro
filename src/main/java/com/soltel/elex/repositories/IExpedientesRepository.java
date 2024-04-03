@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IExpedientesRepository extends JpaRepository<ExpedientesModel, Integer> {
+    boolean existsByCodigo(String codigo);
+
 }

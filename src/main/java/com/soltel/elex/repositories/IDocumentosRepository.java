@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IDocumentosRepository extends JpaRepository<DocumentosModel, Integer> {
+    boolean existsById(int id);
 }

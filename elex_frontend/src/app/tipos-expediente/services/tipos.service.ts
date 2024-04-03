@@ -60,6 +60,8 @@ export class TiposService {
     return this.http.delete<void>(url);
   }
 
+  // Borrado Logico tipos
+  // @DeleteMapping("/borrarLogico/{id}")
   borradoLogicoTipo(id: number): Observable<void> {
     const url = `${this.baseURL}/borrarLogico/${id}`;
     return this.http.put<void>(url, {});

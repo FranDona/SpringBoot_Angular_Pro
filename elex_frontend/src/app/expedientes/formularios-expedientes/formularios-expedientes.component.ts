@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+
+// Importacion de Angular Material
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { ExpedientesService } from '../services/expedientes.service';
 import { Expedientes } from '../models/expedientes.model';
 import { Tipos } from '../../tipos-expediente/models/tipos.model';
@@ -20,7 +24,7 @@ export class FormulariosExpedientesComponent implements OnInit {
   descripcion: string = "";
   tipoId: number = 0;
 
-  constructor(public servicio: ExpedientesService) {}
+  constructor(public servicio: ExpedientesService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.cargarExpedientes();
@@ -34,12 +38,22 @@ export class FormulariosExpedientesComponent implements OnInit {
   }
 
   insertarExpedientes(): void {
-    this.servicio.insertarExpedientes(this.codigo, this.fecha, this.estado, this.opciones, this.descripcion, this.tipoId).subscribe(resultado => {
-      if (resultado) {
-        this.mensaje = "Expediente Insertado";
-        this.cargarExpedientes();
+    this.servicio.insertarExpedientes(this.codigo, this.fecha, this.estado, this.opciones, this.descripcion, this.tipoId).subscribe(
+      resultado => {
+        if (resultado) {
+          this.mensaje = "Expediente Insertado";
+          this.cargarExpedientes();
+        }
+      },
+      // Manejo de error para mostrar la notificación
+      error => {
+        this.snackBar.open('El codigo esta duplicado o se ha usado anteriormente para otro caso', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       }
-    });
+    );
   }
 
   cargarTipos(): void {
@@ -101,5 +115,12 @@ export class FormulariosExpedientesComponent implements OnInit {
       }
     }
 
-  
+    borradoLogicoExpedientes(id: number): void {
+      if (confirm("¿Estás seguro de querer borrar lógicamente este expediente?")) {
+        this.servicio.borradoLogicoExpedientes(id).subscribe(() => {
+          this.mensaje = "Tipo borrado lógicamente";
+          this.cargarTipos();
+        });
+      }
+    }
 }

@@ -35,4 +35,22 @@ public class DocumentosService {
     public Optional<DocumentosModel> obtenerDocumentosPorId(int id) {
         return repository.findById(id);
     }
+
+    // Nuevo método para actualizar lógicamente el campo borrado a true para documentos
+    public DocumentosModel borrarLogicoDocumentos(int id) {
+        Optional<DocumentosModel> documentoOptional = repository.findById(id);
+        if (documentoOptional.isPresent()) {
+            DocumentosModel documento = documentoOptional.get();
+            documento.setBorrado(true); // Actualiza el campo borrado a true
+            return repository.save(documento); // Guarda el documento actualizado en la base de datos
+        } else {
+            return null; // Manejar el caso si el documento no se encuentra
+        }
+    }
+
+
+    public boolean existeDocumentoEnExpediente(int id) {
+        return repository.existsById(id);
+    }
+    
 }

@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+
+// Importacion de Angular Material
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { ActuacionesService } from '../services/actuaciones.service';
 import { Actuaciones } from '../models/actuaciones.model';
 import { Expedientes } from '../../expedientes/models/expedientes.model';
@@ -19,7 +23,8 @@ export class FormulariosActuacionesComponent implements OnInit {
   expedienteId: number = 0;
   borrado: boolean = false;
 
-  constructor(private servicio: ActuacionesService) {}
+  // Inyectar "private snackBar: MatSnackBar para Angular Material
+  constructor(private servicio: ActuacionesService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.cargarActuaciones();
@@ -38,7 +43,16 @@ export class FormulariosActuacionesComponent implements OnInit {
         this.mensaje = "Actuacion Insertada";
         this.cargarActuaciones();
       }
-    });
+    },
+      //Mensaje de Angular Material
+      error => {
+        this.snackBar.open('Actuacion duplicada', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
+      }
+    );
   }
 
   cargarExpedientes(): void {
@@ -85,6 +99,15 @@ export class FormulariosActuacionesComponent implements OnInit {
     if (confirm("¿Estás seguro de querer borrar esta actuacion?")) {
       this.servicio.borrarActuaciones(id).subscribe(() => {
         this.mensaje = "Actuacion borrado";
+        this.cargarActuaciones();
+      });
+    }
+  }
+
+  borradoLogicoActuaciones(id: number): void {
+    if (confirm("¿Estás seguro de querer borrar lógicamente este tipo?")) {
+      this.servicio.borradoLogicoActuaciones(id).subscribe(() => {
+        this.mensaje = "Actucion borrada lógicamente";
         this.cargarActuaciones();
       });
     }

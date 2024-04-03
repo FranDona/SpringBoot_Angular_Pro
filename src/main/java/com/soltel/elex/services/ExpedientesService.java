@@ -34,4 +34,22 @@ public class ExpedientesService {
     public Optional<ExpedientesModel> obtenerExpedientesPorId(int id) {
         return repository.findById(id);
     }
+
+    // Nuevo método para actualizar lógicamente el campo borrado a true
+    public ExpedientesModel borrarLogicoExpediente(int id) {
+        Optional<ExpedientesModel> expedienteOptional = repository.findById(id);
+        if (expedienteOptional.isPresent()) {
+            ExpedientesModel expediente = expedienteOptional.get();
+            expediente.setBorrado(true); // Actualiza el campo borrado a true
+            return repository.save(expediente); // Guarda el expediente actualizado en la base de datos
+        } else {
+            return null; // Manejar el caso si el expediente no se encuentra
+        }
+    }
+
+    public boolean existeExpedientePorCodigo(String codigo) {
+        return repository.existsByCodigo(codigo);
+    }
+
+
 }
