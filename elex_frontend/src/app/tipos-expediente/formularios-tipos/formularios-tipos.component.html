@@ -40,3 +40,25 @@
         </tbody>
     </table>
 </section>
+
+<section class="container mt-3">
+  <h3>Tipos Borrados</h3>
+  <table class="table mt-3">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Materia</th>
+        <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let tipo of tiposBorrados">
+        <td>{{ tipo.id }}</td>
+        <td>{{ tipo.materia }}</td>
+        <td>
+          <!-- Aquí van los botones de acción para los tipos borrados -->
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>

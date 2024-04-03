@@ -38,10 +38,13 @@ export class TiposService {
 
 
 // Muestra toodos los datos
-//    consultarTipos(): Observable<Tipos[]> {
-//    const url = `${this.baseURL}/consultar`;
-//    return this.http.get<Tipos[]>(url);
-//  }
+    consultarTiposBorrados(): Observable<Tipos[]> {
+    const url = `${this.baseURL}/consultar`;
+    return this.http.get<Tipos[]>(url).pipe(
+      // Filtrar los tipos de expediente donde el campo "borrado" sea falso (0)
+      map(tiposBorrados => tiposBorrados.filter(tipo => tipo.borrado === true))
+    );
+  }
 
 
 

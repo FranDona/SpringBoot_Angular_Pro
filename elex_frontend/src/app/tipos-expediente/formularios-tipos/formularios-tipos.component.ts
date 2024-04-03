@@ -13,6 +13,7 @@ import { Tipos } from '../models/tipos.model';
 })
 export class FormulariosTiposComponent implements OnInit {
   tipos: Tipos[] = [];
+  tiposBorrados: Tipos[] = [];
   mensaje: string = "";
   materia: string = "---";
   tipoParaActualizar: Tipos | null = null;
@@ -22,13 +23,22 @@ export class FormulariosTiposComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarTipos();
-  }
+    this.cargarTiposBorrados();
+  }  
 
   cargarTipos(): void {
     this.servicio.consultarTipos().subscribe(datos => {
       this.tipos = datos;
     });
   }
+
+  cargarTiposBorrados(): void {
+    this.servicio.consultarTiposBorrados().subscribe(datos => {
+      this.tiposBorrados = datos;
+    });
+  }
+  
+
 
   insertarTipo(): void {
     this.servicio.insertarTipo(this.materia).subscribe(
