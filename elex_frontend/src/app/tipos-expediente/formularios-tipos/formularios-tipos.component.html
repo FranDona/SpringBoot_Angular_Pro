@@ -1,24 +1,37 @@
 <h2>Tipos Expediente</h2>
 
 <section class="container mt-3">
-    <!-- Ahora el formulario vale tanto para INSERTAR como para ACTUALIZAR -->
-    <form (ngSubmit)="tipoParaActualizar ? actualizarTipoFormulario() : insertarTipo()">
-        <section class="mb-3">
-            <label for="materia" class="form-label">Materia</label>
-            <input type="text" class="form-control" id="materia" [(ngModel)]="materia" name="materia">
-        </section>
-        <!-- Botón para insertar un nuevo tipo -->
-        <button type="button" class="btn btn-primary" (click)="insertarTipo()"
-            *ngIf="!tipoParaActualizar">Insertar</button>
+    <!-- Botón para mostrar el modal de añadir nuevos tipos -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoTipoModal">
+        Añadir nuevos Tipos
+    </button>
 
-        <!-- Botones para actualizar un tipo existente -->
-        <section *ngIf="tipoParaActualizar">
-            <button type="button" class="btn btn-warning" (click)="actualizarTipoFormulario()">Actualizar</button>
-            <button type="button" class="btn btn-light" (click)="cancelarActualizacion()">Cancelar</button>
-        </section>
-    </form>
+    <!-- Modal para añadir nuevos tipos -->
+    <div class="modal fade" id="nuevoTipoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Añadir nuevos Tipos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulario para insertar o actualizar tipos -->
+                    <form (ngSubmit)="tipoParaActualizar ? actualizarTipoFormulario() : insertarTipo()">
+                        <section class="mb-3">
+                            <label for="materia" class="form-label">Materia</label>
+                            <input type="text" class="form-control" id="materia" [(ngModel)]="materia" name="materia">
+                        </section>
+                        <button type="submit" class="btn btn-primary" *ngIf="!tipoParaActualizar">Insertar</button>
+                        <button type="submit" class="btn btn-warning" *ngIf="tipoParaActualizar">Actualizar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Tabla de tipos expediente -->
     <table class="table mt-3">
+        <!-- Cabecera de la tabla -->
         <thead>
             <tr>
                 <th scope="col">ID</th>
@@ -26,13 +39,13 @@
                 <th scope="col">Acciones</th>
             </tr>
         </thead>
-        <!-- Modifico la tabla para añadir los botones adicionales -->
+        <!-- Cuerpo de la tabla -->
         <tbody>
             <tr *ngFor="let tipo of tipos">
                 <td>{{ tipo.id }}</td>
                 <td>{{ tipo.materia }}</td>
                 <td>
-                    <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(tipo)">Actualizar</button>
+                    <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(tipo)" data-bs-toggle="modal" data-bs-target="#nuevoTipoModal">Actualizar</button>
                     <button class="btn btn-danger btn-sm" (click)="borradoLogicoTipo(tipo.id)">Borrado Logico</button>
                 </td>
             </tr>
@@ -40,25 +53,43 @@
     </table>
 </section>
 
-<section class="container mt-3">
-  <h3>Tipos Borrados</h3>
-  <table class="table mt-3">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Materia</th>
-        <th scope="col">Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let tipo of tiposBorrados">
-        <td>{{ tipo.id }}</td>
-        <td>{{ tipo.materia }}</td>
-        <td>
-          <button class="btn btn-info btn-sm" (click)="recuperarTipo(tipo.id)">Recuperar</button>
-          <button class="btn btn-danger btn-sm" (click)="borrarTipo(tipo.id)">Borrar Definitivamente</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</section>
+<!-- Botón para mostrar la papelera -->
+<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#papeleraModal">
+    Papelera
+</button>
+
+<!-- Modal para la papelera -->
+<div class="modal fade" id="papeleraModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tipos Borrados</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Tabla de tipos borrados -->
+                <table class="table">
+                    <!-- Cabecera de la tabla -->
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Materia</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <!-- Cuerpo de la tabla -->
+                    <tbody>
+                        <tr *ngFor="let tipo of tiposBorrados">
+                            <td>{{ tipo.id }}</td>
+                            <td>{{ tipo.materia }}</td>
+                            <td>
+                                <button class="btn btn-info btn-sm" (click)="recuperarTipo(tipo.id)">Recuperar</button>
+                                <button class="btn btn-danger btn-sm" (click)="borrarTipo(tipo.id)">Borrar Definitivamente</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -5,6 +5,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { TiposService } from '../services/tipos.service';
 import { Tipos } from '../models/tipos.model';
+import * as bootstrap from 'bootstrap'; // Importación de Bootstrap
+
 
 @Component({
   selector: 'app-formularios-tipos',
@@ -119,4 +121,6 @@ export class FormulariosTiposComponent implements OnInit {
       this.cargarTiposBorrados();
     });
   }
+
 }
+
