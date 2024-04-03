@@ -127,7 +127,7 @@ public ResponseEntity<ExpedientesModel> insertarExpediente(@PathVariable String 
 
     //Agragamos endpoint para el borrado lógico
     @PutMapping("/borrarLogico/{id}")
-    public ResponseEntity<?> borrarLogicoExpediente(@PathVariable int id) {
+    public ResponseEntity<?> borrarLogicoExpedientes(@PathVariable int id) {
         // Verificar si el expediente existente está presente en la base de datos
         Optional<ExpedientesModel> expediente = expedientesService.obtenerExpedientesPorId(id);
         if (expediente.isPresent()) {
@@ -145,6 +145,34 @@ public ResponseEntity<ExpedientesModel> insertarExpediente(@PathVariable String 
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Expediente no encontrado");
         }
     }
+
+    @PutMapping("/recuperarExpedientes/{id}")
+    public ResponseEntity<?> recuperarExpedientes(@PathVariable int id) {
+        // Verificar si el expediente existente está presente en la base de datos
+        Optional<ExpedientesModel> expedienteOptional = expedientesService.obtenerExpedientesPorId(id);
+        if (expedienteOptional.isPresent()) {
+            // Obtener el expediente
+            ExpedientesModel expediente = expedienteOptional.get();
+            
+            // Verificar si el expediente ya está recuperado (borrado = false)
+            if (!expediente.isBorrado()) {
+                return ResponseEntity.badRequest().body("El expediente ya está recuperado");
+            }
+            
+            // Establecer el atributo 'borrado' en false para indicar que el expediente ha sido recuperado
+            expediente.setBorrado(false);
+            
+            // Actualizar el expediente en el servicio para reflejar la recuperación
+            ExpedientesModel expedienteRecuperado = expedientesService.actualizarExpediente(expediente);
+            
+            // Devolver la respuesta con el expediente actualizado
+            return ResponseEntity.ok(expedienteRecuperado);
+        } else {
+            // Si el expediente no se encuentra, devolver una respuesta 404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Expediente no encontrado");
+        }
+    }
+
 
 
 }

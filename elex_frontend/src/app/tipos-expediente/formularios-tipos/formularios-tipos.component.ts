@@ -1,12 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-
-// Importacion de Angular Material
 import { MatSnackBar } from '@angular/material/snack-bar';
-
 import { TiposService } from '../services/tipos.service';
 import { Tipos } from '../models/tipos.model';
-import * as bootstrap from 'bootstrap'; // Importación de Bootstrap
-
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-formularios-tipos',
@@ -16,32 +12,37 @@ import * as bootstrap from 'bootstrap'; // Importación de Bootstrap
 export class FormulariosTiposComponent implements OnInit {
   tipos: Tipos[] = [];
   tiposBorrados: Tipos[] = [];
+  tiposFiltrados: Tipos[] = []; // Definición de la propiedad tiposFiltrados
   mensaje: string = "";
   materia: string = "---";
   tipoParaActualizar: Tipos | null = null;
-  materiaActualizar: string = ''; // Propiedad para la materia a actualizar en el modal de actualización
+  materiaActualizar: string = '';
+  searchTerm: string = '';
+  searchControl = new FormControl('');
 
-  // Inyectar "private snackBar: MatSnackBar para Angular Material
   constructor(private servicio: TiposService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.cargarTipos();
     this.cargarTiposBorrados();
+    this.searchControl.valueChanges.subscribe(value => {
+      this.filtrarTipos();
+    });
   }  
 
   cargarTipos(): void {
     this.servicio.consultarTipos().subscribe(datos => {
       this.tipos = datos;
+      this.filtrarTipos(); // Aplicar el filtrado inicial
     });
   }
+  
 
   cargarTiposBorrados(): void {
     this.servicio.consultarTiposBorrados().subscribe(datos => {
       this.tiposBorrados = datos;
     });
   }
-  
-
 
   insertarTipo(): void {
     this.servicio.insertarTipo(this.materia).subscribe(
@@ -51,7 +52,6 @@ export class FormulariosTiposComponent implements OnInit {
           this.cargarTipos();
         }
       },
-      //Mensaje de Angular Material
       error => {
         this.snackBar.open('Materia duplicada o usada anteriormente', 'Cerrar', {
           duration: 3000,
@@ -62,21 +62,20 @@ export class FormulariosTiposComponent implements OnInit {
     );
   }
 
-
   actualizarTipoFormulario(): void {
     if (this.tipoParaActualizar && this.materiaActualizar) {
       this.servicio.actualizarTipo(this.tipoParaActualizar.id, this.materiaActualizar).subscribe(resultado => {
         this.mensaje = "Tipo actualizado";
         this.cargarTipos();
         this.tipoParaActualizar = null;
-        this.materiaActualizar = ''; // Limpiar la variable después de la actualización
+        this.materiaActualizar = '';
       });
     }
   }
 
   prepararActualizacion(tipo: Tipos): void {
     this.tipoParaActualizar = tipo;
-    this.materiaActualizar = tipo.materia; // Cargar el nombre del campo que se quiere actualizar
+    this.materiaActualizar = tipo.materia;
   }
 
   cancelarActualizacion(): void {
@@ -88,11 +87,8 @@ export class FormulariosTiposComponent implements OnInit {
     if (confirm("¿Estás seguro de querer borrar definitivamente este tipo?")) {
         this.servicio.borrarTipo(id).subscribe(() => {
             this.mensaje = "Tipo borrado definitivamente";
-            // Actualiza la lista de tipos después de borrar definitivamente
             this.cargarTiposBorrados(); 
-            // Vuelve a cargar los tipos después de borrar definitivamente
             this.cargarTipos();
-            // Muestra una notificación de eliminación definitiva
             this.snackBar.open('Tipo eliminado definitivamente', 'Cerrar', {
                 duration: 3000,
                 horizontalPosition: 'center',
@@ -105,32 +101,41 @@ export class FormulariosTiposComponent implements OnInit {
 
   borradoLogicoTipo(id: number): void {
     if (confirm("¿Estás seguro de querer borrar lógicamente este tipo?")) {
-      this.servicio.borradoLogicoTipo(id).subscribe(() => {
-        this.snackBar.open('Tipo borrado lógicamente', 'Cerrar', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom'
+        this.servicio.borradoLogicoTipo(id).subscribe(() => {
+            this.snackBar.open('Tipo borrado lógicamente', 'Cerrar', {
+                duration: 3000,
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom'
+            });
+            this.tipos = this.tipos.filter(tipo => tipo.id !== id);
+            this.cargarTiposBorrados();
+            this.cargarTipos(); // <-- Recargar la lista de tipos borrados
         });
-        // Eliminar el tipo del arreglo tipos después de realizar el borrado lógico
-        this.tipos = this.tipos.filter(tipo => tipo.id !== id);
-        // Vuelve a cargar la lista de tipos borrados después de realizar el borrado lógico
-        this.cargarTiposBorrados();
-      });
     }
-  }
+}
+
 
   recuperarTipo(id: number): void {
-    // Recuperar un tipo borrado
     this.servicio.recuperarTipo(id).subscribe(() => {
         this.snackBar.open('Tipo recuperado correctamente', 'Cerrar', {
             duration: 3000,
             horizontalPosition: 'center',
             verticalPosition: 'bottom'
         });
-        // Vuelve a cargar los tipos después de la recuperación
+        this.cargarTiposBorrados();
         this.cargarTipos();
     });
-}
+  }
 
+  filtrarTipos(searchTerm: string = ''): void {
+    if (!searchTerm.trim()) {
+      // Si no hay término de búsqueda, mostrar todos los tipos
+      this.tiposFiltrados = this.tipos;
+    } else {
+      // Filtrar los tipos según el término de búsqueda
+      this.tiposFiltrados = this.tipos.filter(tipo =>
+        tipo.materia.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+  }
 }
-

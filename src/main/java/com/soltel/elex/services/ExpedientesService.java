@@ -36,12 +36,29 @@ public class ExpedientesService {
     }
 
     // Nuevo método para actualizar lógicamente el campo borrado a true
-    public ExpedientesModel borrarLogicoExpediente(int id) {
+    public ExpedientesModel borrarLogicoExpedientes(int id) {
         Optional<ExpedientesModel> expedienteOptional = repository.findById(id);
         if (expedienteOptional.isPresent()) {
             ExpedientesModel expediente = expedienteOptional.get();
             expediente.setBorrado(true); // Actualiza el campo borrado a true
             return repository.save(expediente); // Guarda el expediente actualizado en la base de datos
+        } else {
+            return null; // Manejar el caso si el expediente no se encuentra
+        }
+    }
+
+    public ExpedientesModel recuperarExpedientes(int id) {
+        Optional<ExpedientesModel> expedienteOptional = repository.findById(id);
+        if (expedienteOptional.isPresent()) {
+            ExpedientesModel expediente = expedienteOptional.get();
+            // Verificar si el expediente ya está recuperado (borrado = false)
+            if (!expediente.isBorrado()) {
+                return null; // Manejar el caso si el expediente ya está recuperado
+            }
+            // Establecer el atributo 'borrado' en false para indicar que el expediente ha sido recuperado
+            expediente.setBorrado(false);
+            // Guardar el expediente actualizado en la base de datos
+            return repository.save(expediente);
         } else {
             return null; // Manejar el caso si el expediente no se encuentra
         }

@@ -35,6 +35,35 @@ public class ActuacionesService {
         return repository.findById(id);
     }
 
+    // Método para actualizar lógicamente el campo borrado a true para actuaciones
+    public ActuacionesModel borrarLogicoActuacion(int id) {
+        Optional<ActuacionesModel> actuacionOptional = repository.findById(id);
+        if (actuacionOptional.isPresent()) {
+            ActuacionesModel actuacion = actuacionOptional.get();
+            actuacion.setBorrado(true); // Actualiza el campo borrado a true
+            return repository.save(actuacion); // Guarda la actuación actualizada en la base de datos
+        } else {
+            return null; // Manejar el caso si la actuación no se encuentra
+        }
+    }
+
+    // Método para recuperar lógicamente el campo borrado a false para actuaciones
+    public ActuacionesModel recuperarActuacion(int id) {
+        Optional<ActuacionesModel> actuacionOptional = repository.findById(id);
+        if (actuacionOptional.isPresent()) {
+            ActuacionesModel actuacion = actuacionOptional.get();
+            // Verificar si la actuación ya está recuperada (borrado = false)
+            if (!actuacion.isBorrado()) {
+                return null; // Manejar el caso si la actuación ya está recuperada
+            }
+            actuacion.setBorrado(false); // Actualiza el campo borrado a false
+            return repository.save(actuacion); // Guarda la actuación actualizada en la base de datos
+        } else {
+            return null; // Manejar el caso si la actuación no se encuentra
+        }
+    }
+
+
     public boolean existeActuacion(String descripcion) {
         return repository.existsByDescripcion(descripcion);
     }

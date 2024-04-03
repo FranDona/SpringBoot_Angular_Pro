@@ -112,6 +112,34 @@ public class ActuacionesController {
             // Si la actuación no se encuentra, devolver una respuesta 404 Not Found
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Actuación no encontrada");
         }
-}
+    }
+
+    @PutMapping("/recuperarActuacion/{id}")
+    public ResponseEntity<?> recuperarActuacion(@PathVariable int id) {
+        // Verificar si la actuación existente está presente en la base de datos
+        Optional<ActuacionesModel> actuacionOptional = actuacionesService.obtenerActuacionesPorId(id);
+        if (actuacionOptional.isPresent()) {
+            // Obtener la actuación
+            ActuacionesModel actuacion = actuacionOptional.get();
+            
+            // Verificar si la actuación ya está recuperada (borrada = false)
+            if (!actuacion.isBorrado()) {
+                return ResponseEntity.badRequest().body("La actuación ya está recuperada");
+            }
+            
+            // Establecer el atributo 'borrada' en false para indicar que la actuación ha sido recuperada
+            actuacion.setBorrado(false);
+            
+            // Actualizar la actuación en el servicio para reflejar la recuperación
+            ActuacionesModel actuacionRecuperada = actuacionesService.actualizarActuaciones(actuacion);
+            
+            // Devolver la respuesta con la actuación actualizada
+            return ResponseEntity.ok(actuacionRecuperada);
+        } else {
+            // Si la actuación no se encuentra, devolver una respuesta 404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Actuación no encontrada");
+        }
+    }
+
 
 }

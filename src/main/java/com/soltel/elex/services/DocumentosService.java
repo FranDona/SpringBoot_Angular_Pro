@@ -48,6 +48,21 @@ public class DocumentosService {
         }
     }
 
+    public DocumentosModel recuperarDocumentos(int id) {
+        Optional<DocumentosModel> documentoOptional = repository.findById(id);
+        if (documentoOptional.isPresent()) {
+            DocumentosModel documento = documentoOptional.get();
+            // Verificar si el documento ya está recuperado (borrado = false)
+            if (!documento.isBorrado()) {
+                return null; // Manejar el caso si el documento ya está recuperado
+            }
+            documento.setBorrado(false); // Actualiza el campo borrado a false
+            return repository.save(documento); // Guarda el documento actualizado en la base de datos
+        } else {
+            return null; // Manejar el caso si el documento no se encuentra
+        }
+    }
+
 
     public boolean existeDocumentoEnExpediente(int id) {
         return repository.existsById(id);
