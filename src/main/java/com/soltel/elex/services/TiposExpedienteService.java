@@ -46,7 +46,8 @@ public class TiposExpedienteService {
     }
 
     public boolean existeMateria(String materia) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'existeMateria'");
+        return repository.existsByMateria(materia);
     }
+    
+
 }

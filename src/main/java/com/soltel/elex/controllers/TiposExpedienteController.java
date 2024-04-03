@@ -35,6 +35,7 @@ public class TiposExpedienteController {
         return ResponseEntity.status(HttpStatus.CONFLICT).body("La materia ya existe"); // Devuelve 409 si la materia ya existe
     }
     
+    // Usamos el siguiente codigo para Angular Material
     // Si la materia no existe, procede con la inserción normalmente
     TiposExpedienteModel tipo = new TiposExpedienteModel();
     tipo.setMateria(materia);
@@ -65,6 +66,7 @@ public class TiposExpedienteController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    //Agragamos endpoint para el borrado lógico
     @PutMapping("/borrarLogico/{id}")
     public ResponseEntity<?> borrarLogicoTipo(@PathVariable int id) {
     Optional<TiposExpedienteModel> tipo = servicioTipo.obtenerTipoPorId(id);

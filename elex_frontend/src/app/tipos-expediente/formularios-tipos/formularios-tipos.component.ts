@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+
+// Importacion de Angular Material
 import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { TiposService } from '../services/tipos.service';
 import { Tipos } from '../models/tipos.model';
 
@@ -14,6 +17,7 @@ export class FormulariosTiposComponent implements OnInit {
   materia: string = "---";
   tipoParaActualizar: Tipos | null = null;
 
+  // Inyectar "private snackBar: MatSnackBar para Angular Material
   constructor(private servicio: TiposService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
@@ -34,6 +38,7 @@ export class FormulariosTiposComponent implements OnInit {
           this.cargarTipos();
         }
       },
+      //Mensaje de Angular Material
       error => {
         this.snackBar.open('Materia duplicada o usada anteriormente', 'Cerrar', {
           duration: 3000,
