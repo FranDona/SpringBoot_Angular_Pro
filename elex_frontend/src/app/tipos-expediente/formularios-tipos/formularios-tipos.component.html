@@ -1,12 +1,17 @@
-<h2>Tipos Expediente</h2>
-
 <section class="container mt-3">
+    
     <!-- Botón para mostrar el modal de añadir nuevos tipos -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoTipoModal">
         Añadir nuevos Tipos
     </button>
 
-    <!-- Modal para añadir nuevos tipos -->
+    <!-- Botón para mostrar la papelera -->
+    <button type="button" class="btn btn-secondary m-2" data-bs-toggle="modal" data-bs-target="#papeleraModal">
+        Papelera
+    </button>
+
+
+    <!-- Modal para insertar nuevos tipos -->
     <div class="modal fade" id="nuevoTipoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -15,14 +20,35 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Formulario para insertar o actualizar tipos -->
-                    <form (ngSubmit)="tipoParaActualizar ? actualizarTipoFormulario() : insertarTipo()">
+                    <!-- Formulario para insertar nuevos tipos -->
+                    <form (ngSubmit)="insertarTipo()">
                         <section class="mb-3">
                             <label for="materia" class="form-label">Materia</label>
                             <input type="text" class="form-control" id="materia" [(ngModel)]="materia" name="materia">
                         </section>
-                        <button type="submit" class="btn btn-primary" *ngIf="!tipoParaActualizar">Insertar</button>
-                        <button type="submit" class="btn btn-warning" *ngIf="tipoParaActualizar">Actualizar</button>
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Insertar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para actualizar tipos -->
+    <div class="modal fade" id="actualizarTipoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actualizar Tipo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulario para actualizar tipos -->
+                    <form (ngSubmit)="actualizarTipoFormulario()">
+                        <section class="mb-3">
+                            <label for="materiaActualizar" class="form-label">Nueva Materia</label>
+                            <input type="text" class="form-control" id="materiaActualizar" [(ngModel)]="materiaActualizar" name="materiaActualizar">
+                        </section>
+                        <button type="submit" class="btn btn-warning" data-bs-dismiss="modal">Actualizar</button>
                     </form>
                 </div>
             </div>
@@ -45,7 +71,7 @@
                 <td>{{ tipo.id }}</td>
                 <td>{{ tipo.materia }}</td>
                 <td>
-                    <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(tipo)" data-bs-toggle="modal" data-bs-target="#nuevoTipoModal">Actualizar</button>
+                    <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(tipo)" data-bs-toggle="modal" data-bs-target="#actualizarTipoModal">Actualizar</button>
                     <button class="btn btn-danger btn-sm" (click)="borradoLogicoTipo(tipo.id)">Borrado Logico</button>
                 </td>
             </tr>
@@ -53,10 +79,6 @@
     </table>
 </section>
 
-<!-- Botón para mostrar la papelera -->
-<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#papeleraModal">
-    Papelera
-</button>
 
 <!-- Modal para la papelera -->
 <div class="modal fade" id="papeleraModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -83,8 +105,8 @@
                             <td>{{ tipo.id }}</td>
                             <td>{{ tipo.materia }}</td>
                             <td>
-                                <button class="btn btn-info btn-sm" (click)="recuperarTipo(tipo.id)">Recuperar</button>
-                                <button class="btn btn-danger btn-sm" (click)="borrarTipo(tipo.id)">Borrar Definitivamente</button>
+                                <button class="btn btn-info btn-sm" (click)="recuperarTipo(tipo.id); cargarTipos()" data-bs-dismiss="modal">Recuperar</button>
+                                <button class="btn btn-danger btn-sm" (click)="borrarTipo(tipo.id); cargarTipos()" data-bs-dismiss="modal">Borrar Definitivamente</button>
                             </td>
                         </tr>
                     </tbody>
