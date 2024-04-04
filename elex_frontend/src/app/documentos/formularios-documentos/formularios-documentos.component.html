@@ -1,64 +1,148 @@
-<h2>Documentos!</h2>
+<section class="container mt-3 w-75">
+  <!-- Botón para mostrar el modal de añadir nuevos documentos -->
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoDocumentoModal">
+      <i class="fa-solid fa-file-import fa-lg"></i> Añadir nuevos Documentos
+  </button>
 
-<section class="container mt-3">
-  <!-- Aquí va tu tabla para mostrar los documentos -->
+  <!-- Botón para mostrar la papelera -->
+  <button type="button" class="btn btn-secondary m-2" data-bs-toggle="modal" data-bs-target="#papeleraModal">
+      <i class="fa-solid fa-trash fa-lg"></i> Papelera
+  </button>
+  
+  <div class="input-group mb-3 w-25">
+    <input type="text" class="form-control w-25" placeholder="Buscar por codigo" [(ngModel)]="searchTerm" (keyup)="filtrarDocumentos(searchTerm)">
+    <button class="btn btn-outline-secondary" type="button" id="button-addon2">
+      <i class="fas fa-search"></i> 
+    </button>
+  </div>
+
+  <!-- Modal para insertar nuevos documentos -->
+  <div class="modal fade" id="nuevoDocumentoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Añadir nuevos Documentos</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario para insertar nuevos documentos -->
+          <form (ngSubmit)="insertarDocumentos()">
+            <section class="mb-3">
+              <label for="ruta" class="form-label">Ruta PDF</label>
+              <input type="text" class="form-control" id="ruta" [(ngModel)]="ruta" name="ruta">
+            </section>
+            <section class="mb-3">
+              <label for="tasa" class="form-label">Precio</label>
+              <input type="number" class="form-control" id="tasa" [(ngModel)]="tasa" name="tasa">
+            </section>
+            <section class="mb-3">
+              <label for="expedienteId" class="form-label">ID del Expediente</label>
+              <select class="form-control" id="expedienteId" [(ngModel)]="expedienteId" name="expedienteId">
+                <option *ngFor="let expediente of expedientes" [value]="expediente.id">{{ expediente.codigo }}</option>
+              </select>
+            </section>
+            <!-- Botón para insertar un nuevo documento -->
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Insertar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para actualizar tipos -->
+  <div class="modal fade" id="actualizarDocumentosModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Actualizar Documentos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para actualizar tipos -->
+                <form (ngSubmit)="actualizarDocumentosFormulario()">
+                  <!-- Campo para la ruta -->
+                  <section class="mb-3">
+                    <label for="rutaActualizar" class="form-label">Nueva Ruta PDF</label>
+                    <input type="text" class="form-control" id="rutaActualizar" [(ngModel)]="rutaActualizar" name="rutaActualizar">
+                  </section>
+
+                  <!-- Campo para la tasa -->
+                  <section class="mb-3">
+                    <label for="tasaActualizar" class="form-label">Nuevo Precio</label>
+                    <input type="number" class="form-control" id="tasaActualizar" [(ngModel)]="tasaActualizar" name="tasaActualizar">
+                  </section>
+
+                    <button type="submit" class="btn btn-warning" data-bs-dismiss="modal">Actualizar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <!-- Tabla para mostrar los documentos -->
   <table class="table mt-3">
-      <thead>
-          <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Ruta pdf</th>
-              <th scope="col">Precio</th>
-              <th scope="col">Código del expediente</th>
-              <th scope="col">Fecha del expediente</th>
-              <th scope="col">Estado del expediente</th>
-              <th scope="col">Descripción del expediente</th>
-          </tr>
-      </thead>
-      <!-- Modifico la tabla para añadir los botones adicionales -->
-      <tbody>
-          <tr *ngFor="let documento of documentos">
-              <td>{{ documento.id }}</td>
-              <td>{{ documento.ruta }}</td>
-              <td>{{ documento.tasa }}€</td>
-              <td>{{ documento.expediente.codigo }}</td>
-              <td>{{ documento.expediente.fecha }}</td>
-              <td>{{ documento.expediente.estado }}</td>
-              <td>{{ documento.expediente.descripcion }}</td>
-              <td>
-                  <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(documento)">Actualizar</button>
-                  <button class="btn btn-danger btn-sm" (click)="borrarDocumentos(documento.id)">Borrar</button>
-                  <button class="btn btn-danger btn-sm" (click)="borradoLogicoDocumentos(documento.id)">Borrado Logico</button>
-              </td>
-          </tr>
-      </tbody>
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Ruta PDF</th>
+        <th scope="col">Precio</th>
+        <th scope="col">Código del expediente</th>
+        <th scope="col">Fecha del expediente</th>
+        <th scope="col">Estado del expediente</th>
+        <th scope="col">Descripción del expediente</th>
+        <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let documento of documentosFiltrados">
+        <td>{{ documento.id }}</td>
+        <td>{{ documento.ruta }}</td>
+        <td>{{ documento.tasa }}€</td>
+        <td>{{ documento.expediente.codigo }}</td>
+        <td>{{ documento.expediente.fecha }}</td>
+        <td>{{ documento.expediente.estado }}</td>
+        <td>{{ documento.expediente.descripcion }}</td>
+        <td>
+          <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(documento)" data-bs-toggle="modal" data-bs-target="#actualizarDocumentosModal"><i class="fa-solid fa-pen-to-square fa-xl"></i></button>
+          <button class="btn btn-danger btn-sm" (click)="borradoLogicoDocumentos(documento.id)"><i class="fa-solid fa-trash fa-xl"></i></button>
+        </td>
+      </tr>
+    </tbody>
   </table>
 </section>
 
-<!-- Agregamos el formulario -->
-<section class="container mt-3">
-  <h3>Insertar Documento</h3>
-  <form (ngSubmit)="insertarDocumentos()">
-    <div class="form-group">
-      <label for="ruta">Ruta PDF:</label>
-      <input type="text" class="form-control" id="ruta" [(ngModel)]="ruta" name="ruta">
-    </div>
-    <div class="form-group">
-      <label for="tasa">Precio:</label>
-      <input type="number" class="form-control" id="tasa" [(ngModel)]="tasa" name="tasa">
-    </div>
-    <div class="form-group">
-      <label for="expedienteId">ID del Expediente:</label>
-      <select class="form-control" id="expedienteId" [(ngModel)]="expedienteId" name="expedienteId">
-        <option *ngFor="let expediente of expedientes" [value]="expediente.id">{{ expediente.codigo }}</option>
-      </select>
-    </div>
-    <!-- Botón para insertar un nuevo documento -->
-    <button type="submit" class="btn btn-primary" *ngIf="!documentosParaActualizar">Insertar</button>
 
-    <!-- Botones para actualizar un documento existente -->
-    <section *ngIf="documentosParaActualizar">
-        <button type="button" class="btn btn-warning" (click)="actualizarDocumentos()">Actualizar</button>
-        <button type="button" class="btn btn-light" (click)="cancelarActualizacion()">Cancelar</button>
-    </section>
-  </form>
-</section>
+
+<!-- Modal para la papelera -->
+<div class="modal fade" id="papeleraModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fa-solid fa-trash fa-xl"></i>  Papelera</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Tabla de tipos borrados -->
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Materia</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let documento of documentosBorrados">
+              <td>{{ documento.id }}</td>
+              <td>{{ documento.expediente.codigo }}</td>
+              <td>
+                <button class="btn btn-success btn-sm" (click)="recuperarDocumentos(documento.id); cargarDocumentos()" >Restaurar <i class="fa-solid fa-trash-can-arrow-up"></i></button>
+                <button class="btn btn-danger btn-sm" (click)="borrarDocumentos(documento.id); cargarDocumentos()">Borrar Definitivamente <i class="fa-solid fa-xmark"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

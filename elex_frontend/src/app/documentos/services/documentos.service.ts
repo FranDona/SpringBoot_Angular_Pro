@@ -36,6 +36,15 @@ export class DocumentosService {
       map(documentos => documentos.filter(documento => documento.borrado === false))
     );
   }
+
+  // Muestra toodos los datos
+  consultarDocumentosBorrados(): Observable<Documentos[]> {
+    const url = `${this.baseURL}/consultar`;
+    return this.http.get<Documentos[]>(url).pipe(
+      // Filtrar los tipos de expediente donde el campo "borrado" sea falso (0)
+      map(tiposBorrados => tiposBorrados.filter(tipo => tipo.borrado === true))
+    );
+  }
   //Consultar entidad Expedientes
   consultarExpedientes(): Observable<Expedientes[]> {
     const url = `${environment.apiURL}/expedientes/consultar`; 
@@ -63,6 +72,13 @@ export class DocumentosService {
     return this.http.put<void>(url, {});
   }
 
+  
+  // Recuperacion documentos
+  // @PutMapping("/recuperarDocumento/{id}")
+  recuperarDocumentos(id: number): Observable<void> {
+    const url = `${this.baseURL}/recuperarDocumentos/${id}`;
+    return this.http.put<void>(url, {});
+  }
 
   // Consulta general con todos los datos
   //consultarDocumentos(): Observable<Documentos[]> {
