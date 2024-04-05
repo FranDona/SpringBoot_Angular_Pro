@@ -66,8 +66,8 @@ public class DocumentosController {
 
     @PutMapping("/actualizar/{id}/{ruta}/{tasa}")
     public ResponseEntity<DocumentosModel> actualizarDocumento(@PathVariable int id,
-                                                                @PathVariable String ruta,
-                                                                @PathVariable double tasa) {
+                                                               @PathVariable String ruta,
+                                                               @PathVariable double tasa) {
         // Verificar si el documento existente está presente en la base de datos
         Optional<DocumentosModel> documentoExistente = documentosService.obtenerDocumentosPorId(id);
         if (documentoExistente.isPresent()) {

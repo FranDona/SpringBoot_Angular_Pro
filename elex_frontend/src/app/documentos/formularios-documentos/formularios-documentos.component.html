@@ -61,18 +61,18 @@
                 <!-- Formulario para actualizar tipos -->
                 <form (ngSubmit)="actualizarDocumentosFormulario()">
                   <!-- Campo para la ruta -->
-                  <section class="mb-3">
+                  <section class="form-group mb-3">
                     <label for="rutaActualizar" class="form-label">Nueva Ruta PDF</label>
                     <input type="text" class="form-control" id="rutaActualizar" [(ngModel)]="rutaActualizar" name="rutaActualizar">
                   </section>
 
                   <!-- Campo para la tasa -->
-                  <section class="mb-3">
-                    <label for="tasaActualizar" class="form-label">Nuevo Precio</label>
+                  <section class="form-group mb-3">
+                    <label for="tasaActualizar" class="form-label">Nueva Tasa</label>
                     <input type="number" class="form-control" id="tasaActualizar" [(ngModel)]="tasaActualizar" name="tasaActualizar">
                   </section>
 
-                    <button type="submit" class="btn btn-warning" data-bs-dismiss="modal">Actualizar</button>
+                  <button type="submit" class="btn btn-warning" data-bs-dismiss="modal">Actualizar</button>
                 </form>
             </div>
         </div>
@@ -127,7 +127,7 @@
           <thead>
             <tr>
               <th scope="col">ID</th>
-              <th scope="col">Materia</th>
+              <th scope="col">Codigo Expe.</th>
               <th scope="col">Acciones</th>
             </tr>
           </thead>

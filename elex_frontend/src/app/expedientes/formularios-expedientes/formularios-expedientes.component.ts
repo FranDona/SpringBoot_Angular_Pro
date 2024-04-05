@@ -6,6 +6,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExpedientesService } from '../services/expedientes.service';
 import { Expedientes } from '../models/expedientes.model';
 import { Tipos } from '../../tipos-expediente/models/tipos.model';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-formularios-expedientes',
@@ -14,6 +16,8 @@ import { Tipos } from '../../tipos-expediente/models/tipos.model';
 })
 export class FormulariosExpedientesComponent implements OnInit {
   expedientes: Expedientes[] = [];
+  expedientesBorrados: Expedientes[] = [];
+  expedientesFiltrados: Expedientes[] = [];
   mensaje: string = "";
   tipos: Tipos[] = [];
 
@@ -23,19 +27,40 @@ export class FormulariosExpedientesComponent implements OnInit {
   opciones: string = "";
   descripcion: string = "";
   tipoId: number = 0;
+  searchControl: FormControl = new FormControl('');
+  searchTerm: string = '';
 
   constructor(public servicio: ExpedientesService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.cargarExpedientes();
     this.cargarTipos(); // Aquí se llama al método cargarTipos() en el ngOnInit()
+    this.cargarExpedientesBorrados();
+    this.searchControl.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(value => {
+      this.filtrarExpedientes(value);
+    });
   }
 
   cargarExpedientes(): void {
     this.servicio.consultarExpedientes().subscribe(datos => {
       this.expedientes = datos;
+      this.filtrarExpedientes(this.searchTerm);
     });
   }
+
+  cargarExpedientesBorrados(): void {
+    this.servicio.consultarExpedientesBorrados().subscribe(datos => {
+      this.expedientesBorrados = datos;
+    });
+  }
+  
+  
+  cargarTipos(): void {
+    this.servicio.consultarTipos().subscribe(tipos => {
+      this.tipos = tipos;
+    });
+  }
+  
 
   insertarExpedientes(): void {
     this.servicio.insertarExpedientes(this.codigo, this.fecha, this.estado, this.opciones, this.descripcion, this.tipoId).subscribe(
@@ -56,17 +81,11 @@ export class FormulariosExpedientesComponent implements OnInit {
     );
   }
 
-  cargarTipos(): void {
-    this.servicio.consultarTipos().subscribe(tipos => {
-      this.tipos = tipos;
-    });
-  }
-
     // Atributo tipo que usamos para actualizar
   expedientesParaActualizar: Expedientes | null = null;
 
 
-  actualizarExpedientes(): void {
+  actualizarExpedientesFormulario(): void {
     if (this.expedientesParaActualizar && this.codigo && this.fecha && this.estado && this.opciones && this.descripcion && this.tipoId) {
       this.servicio.actualizarExpedientes(this.expedientesParaActualizar.id, this.codigo, this.fecha, this.estado, this.opciones, this.descripcion, this.tipoId).subscribe(resultado => {
         this.mensaje = "Expediente actualizado";
@@ -109,7 +128,7 @@ export class FormulariosExpedientesComponent implements OnInit {
     borrarExpedientes(id: number): void {
       if (confirm("¿Estás seguro de querer borrar este Expediente?")) {
         this.servicio.borrarExpedientes(id).subscribe(() => {
-          this.mensaje = "Documento borrado";
+          this.mensaje = "Expedientes borrado";
           this.cargarExpedientes();
         });
       }
@@ -118,9 +137,34 @@ export class FormulariosExpedientesComponent implements OnInit {
     borradoLogicoExpedientes(id: number): void {
       if (confirm("¿Estás seguro de querer borrar lógicamente este expediente?")) {
         this.servicio.borradoLogicoExpedientes(id).subscribe(() => {
-          this.mensaje = "Tipo borrado lógicamente";
+          this.mensaje = "Expediente borrado lógicamente";
           this.cargarTipos();
         });
+      }
+    }
+
+
+    recuperarExpedientes(id: number): void {
+      this.servicio.recuperarExpedientes(id).subscribe(() => {
+          this.snackBar.open('Expedientes recuperado correctamente', 'Cerrar', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom'
+          });
+          this.cargarExpedientesBorrados();
+          this.cargarExpedientes();
+      });
+    }
+
+    filtrarExpedientes(searchTerm: string = ''): void {
+      if (!searchTerm.trim()) {
+        // Si no hay término de búsqueda, mostrar todos los tipos
+        this.expedientesFiltrados = this.expedientes;
+      } else {
+        // Filtrar los tipos según el término de búsqueda
+        this.expedientesFiltrados = this.expedientes.filter(expediente =>
+          expediente.codigo.toLowerCase().includes(searchTerm.toLowerCase())
+        );
       }
     }
 }

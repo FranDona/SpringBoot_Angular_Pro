@@ -1,4 +1,112 @@
-<h2>Actuaciones</h2>
+<section class="container mt-3 w-75">
+  <!-- Botón para mostrar el modal de añadir nuevas actuaciones -->
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevaActuacionModal">
+      <i class="fa-solid fa-file-import fa-lg"></i> Añadir nuevas Actuaciones
+  </button>
+
+  <!-- Botón para mostrar la papelera -->
+  <button type="button" class="btn btn-secondary m-2" data-bs-toggle="modal" data-bs-target="#papeleraModal">
+      <i class="fa-solid fa-trash fa-lg"></i> Papelera
+  </button>
+  
+  <div class="input-group mb-3 w-25">
+    <input type="text" class="form-control w-25" placeholder="Buscar por codigo/fecha/estado" [(ngModel)]="searchTerm" (keyup)="filtrarActuaciones(searchTerm)">
+    <button class="btn btn-outline-secondary" type="button" id="button-addon2">
+      <i class="fas fa-search"></i> 
+    </button>
+  </div>
+
+  <!-- Modal para insertar nuevos documentos -->
+  <div class="modal fade" id="nuevaActuacionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Añadir nuevas Actuaciones</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+          <!-- Formulario de insercion -->
+          <form (ngSubmit)="insertarActuaciones()">
+            <!-- Descripcion -->
+            <section class="form-group mb-3">
+              <label for="descripcion">Descripcion de la actuacion</label>
+              <input type="text" class="form-control" id="descripcion" [(ngModel)]="descripcion" name="descripcion">
+            </section>
+            <!-- Finalizado? -->
+            <section class="form-group mb-3">
+              <label for="finalizado">¿Finalizado?</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="finalizado-si" value="true" [(ngModel)]="finalizado" name="finalizado">
+                <label class="form-check-label" for="finalizado-si">Sí</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="finalizado-no" value="false" [(ngModel)]="finalizado" name="finalizado">
+                <label class="form-check-label" for="finalizado-no">No</label>
+              </div>
+            </section>
+            <!-- Fecha -->
+            <section class="form-group mb-3">
+              <label for="fecha">Fecha de actuacion:</label>
+              <input type="date" class="form-control" id="fecha" [(ngModel)]="fecha" name="fecha">
+            </section>
+            <!-- ID Expediente -->
+            <section class="form-group mb-3">
+              <label for="expedienteId">ID del Expediente:</label>
+              <select class="form-control" id="expedienteId" [(ngModel)]="expedienteId" name="expedienteId">
+                <option *ngFor="let expediente of expedientes" [value]="expediente.id">{{ expediente.codigo }}</option>
+              </select>
+            </section>
+            <!-- Botón para insertar una nueva actuacion -->
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Insertar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para actualizar tipos -->
+  <div class="modal fade" id="actualizarActuacionesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Actualizar Documentos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                  <form (ngSubmit)="actualizarActuacionesFormulario()">
+
+                      <!-- Descripcion -->
+                      <section class="form-group mb-3">
+                        <label for="descripcionActualizar">Descripcion de la actuacion</label>
+                        <input type="text" class="form-control" id="descripcionActualizar" [(ngModel)]="descripcionActualizar" name="descripcionActualizar">
+                      </section>
+
+                      <!-- Finalizado? -->
+                      <section class="form-group mb-3">
+                        <label for="finalizado">¿Finalizado?</label><br>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" id="finalizadoActualizar-si" value="true" [(ngModel)]="finalizadoActualizar" name="finalizadoActualizar">
+                          <label class="form-check-label" for="finalizadoActualizar-si">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" id="finalizadoActualizar-no" value="false" [(ngModel)]="finalizadoActualizar" name="finalizadoActualizar">
+                          <label class="form-check-label" for="finalizadoActualizar-no">No</label>
+                        </div>
+                      </section>
+
+                      <!-- Fecha -->
+                      <section class="form-group mb-3">
+                        <label for="fechaActualizar">Fecha de actuacion:</label>
+                        <input type="date" class="form-control" id="fechaActualizar" [(ngModel)]="fechaActualizar" name="fechaActualizar">
+                      </section>
+
+                    <button type="submit" class="btn btn-warning" data-bs-dismiss="modal">Actualizar</button>
+                </form>
+          </div>
+      </div>
+  </div>
+</div>
 
 <section class="container mt-3">
   <!-- Aquí va tu tabla para mostrar las actuaciones -->
@@ -17,7 +125,7 @@
       </thead>
       <!-- Modifico la tabla para añadir los botones adicionales -->
       <tbody>
-          <tr *ngFor="let actuacion of actuaciones">
+          <tr *ngFor="let actuacion of actuacionesFiltradas">
               <td>{{ actuacion.id }}</td>
               <td>{{ actuacion.descripcion }}</td>
               <td>{{ actuacion.finalizado }}</td>
@@ -26,48 +134,55 @@
               <td>{{ actuacion.expediente.fecha }}</td>
               <td>{{ actuacion.expediente.estado }}</td>
               <td>
-                  <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(actuacion)">Actualizar</button>
-                  <button class="btn btn-danger btn-sm" (click)="borrarActuaciones(actuacion.id)">Borrar</button>
-                  <button class="btn btn-danger btn-sm" (click)="borradoLogicoActuaciones(actuacion.id)">Borrado Logico</button>
+                <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(actuacion)" data-bs-toggle="modal" data-bs-target="#actualizarActuacionesModal"><i class="fa-solid fa-pen-to-square fa-xl"></i></button>
+                <button class="btn btn-danger btn-sm" (click)="borradoLogicoActuaciones(actuacion.id)"><i class="fa-solid fa-trash fa-xl"></i></button>
               </td>
           </tr>
       </tbody>
   </table>
 </section>
 
-<!-- Agregamos el formulario -->
-<section class="container mt-3">
-  <h3>Insertar Actuación</h3>
-  <form (ngSubmit)="insertarActuaciones()">
-    <div class="form-group">
-      <label for="descripcion">Descripcion de la actuacion</label>
-      <input type="text" class="form-control" id="descripcion" [(ngModel)]="descripcion" name="descripcion">
-    </div>
-    <div class="form-group">
-      <label for="tasa">Precio:</label>
-      <input type="text" class="form-control" id="tasa" [(ngModel)]="finalizado" name="tasa">
-    </div>
-    <div class="form-group">
-        <label for="tasa">Precio:</label>
-        <input type="date" class="form-control" id="tasa" [(ngModel)]="fecha" name="tasa">
-      </div>
-      <div class="form-group">
-        <label for="tasa">Precio:</label>
-        <input type="number" class="form-control" id="tasa" [(ngModel)]="expedienteId" name="tasa">
-      </div>
-    <div class="form-group">
-      <label for="expedienteId">ID del Expediente:</label>
-      <select class="form-control" id="expedienteId" [(ngModel)]="expedienteId" name="expedienteId">
-        <option *ngFor="let expediente of expedientes" [value]="expediente.id">{{ expediente.codigo }}</option>
-      </select>
-    </div>
-    <!-- Botón para insertar una nueva actuación -->
-    <button type="submit" class="btn btn-primary" *ngIf="!actuacionesParaActualizar">Insertar</button>
 
-    <!-- Botones para actualizar una actuación existente -->
-    <section *ngIf="actuacionesParaActualizar">
-        <button type="button" class="btn btn-warning" (click)="actualizarActuaciones()">Actualizar</button>
-        <button type="button" class="btn btn-light" (click)="cancelarActualizacion()">Cancelar</button>
-    </section>
-  </form>
-</section>
+
+<!-- Modal para la papelera -->
+<div class="modal fade" id="papeleraModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fa-solid fa-trash fa-xl"></i>  Papelera</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Tabla de actuaciones borrados -->
+        <table class="table mt-3">
+          <thead>
+              <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Finalizado</th>
+                  <th scope="col">Apertura de Actuacion</th>
+                  <th scope="col">Codigo Expediente</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col"></th>
+              </tr>
+          </thead>
+          <!-- Modifico la tabla para añadir los botones adicionales -->
+          <tbody>
+              <tr *ngFor="let actuacion of actuacionesBorradas">
+                  <td>{{ actuacion.id }}</td>
+                  <td>{{ actuacion.finalizado }}</td>
+                  <td>{{ actuacion.fecha }}</td>
+                  <td>{{ actuacion.expediente.codigo }}</td>
+                  <td>{{ actuacion.expediente.estado }}</td>
+                  <td>
+                    <button class="btn btn-success btn-sm" (click)="recuperarActuaciones(actuacion.id); cargarActuaciones()" >Restaurar <i class="fa-solid fa-trash-can-arrow-up"></i></button>
+                    <button class="btn btn-danger btn-sm" (click)="borrarActuaciones(actuacion.id); cargarActuaciones()">Borrar Definitivamente <i class="fa-solid fa-xmark"></i></button>
+                  </td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+

@@ -40,16 +40,16 @@ public class ExpedientesController {
     }
 
     @PostMapping("/insertar/{codigo}/{fecha}/{estado}/{opciones}/{descripcion}/{tipoId}")
-public ResponseEntity<ExpedientesModel> insertarExpediente(@PathVariable String codigo,
-                                                            @PathVariable LocalDate fecha,
-                                                            @PathVariable String estado,
-                                                            @PathVariable String opciones,
-                                                            @PathVariable String descripcion,
-                                                            @PathVariable int tipoId) {
+    public ResponseEntity<ExpedientesModel> insertarExpediente(@PathVariable String codigo,
+                                                               @PathVariable LocalDate fecha,
+                                                               @PathVariable String estado,
+                                                               @PathVariable String opciones,
+                                                               @PathVariable String descripcion,
+                                                               @PathVariable int tipoId) {
     // Verificar si el código del expediente ya existe en la base de datos
     boolean codigoExiste = expedientesService.existeExpedientePorCodigo(codigo);
     if (codigoExiste) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).build(); // Devuelve 409 si el código del expediente ya existe
+        return ResponseEntity.status(HttpStatus.CONFLICT).build(); // De0vuelve 409 si el código del expediente ya existe
     }
     
     // Obtener el objeto TiposExpedienteModel correspondiente al tipoId

@@ -1,46 +1,123 @@
-<h2>Expedientes</h2>
+<section class="container mt-3 w-75">
+    <!-- Botón para mostrar el modal de añadir nuevos documentos -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoExpedienteModal">
+        <i class="fa-solid fa-file-import fa-lg"></i> Añadir nuevos Expedientes
+    </button>
+  
+    <!-- Botón para mostrar la papelera -->
+    <button type="button" class="btn btn-secondary m-2" data-bs-toggle="modal" data-bs-target="#papeleraModal">
+        <i class="fa-solid fa-trash fa-lg"></i> Papelera
+    </button>
+    
+    <div class="input-group mb-3 w-25">
+      <input type="text" class="form-control w-25" placeholder="Buscar por codigo" [(ngModel)]="searchTerm" (keyup)="filtrarExpedientes(searchTerm)">
+      <button class="btn btn-outline-secondary" type="button" id="button-addon2">
+        <i class="fas fa-search"></i> 
+      </button>
+    </div>
 
-<section class="container mt-3">
-    <form (ngSubmit)="expedientesParaActualizar ? actualizarExpedientes() : insertarExpedientes()">
-        <section class="mb-3">
-            <label for="codigo" class="form-label">Código</label>
-            <input type="text" class="form-control" id="codigo" [(ngModel)]="codigo" name="codigo">
-        </section>
-        <section class="mb-3">
-            <label for="fecha" class="form-label">Fecha</label>
-            <input type="date" class="form-control" id="fecha" [(ngModel)]="fecha" name="fecha">
-        </section>
-        <section class="mb-3">
-            <label for="estado" class="form-label">Estado</label>
-            <select class="form-select" id="estado" [(ngModel)]="estado" name="estado">
-                <option value="Pendiente">Pendiente</option>
-                <option value="Enviado">Enviado</option>
-                <option value="Erróneo">Erróneo</option>
-            </select>
-        </section>
-        <section class="mb-3">
-            <label for="opciones" class="form-label">Opciones</label>
-            <input type="text" class="form-control" id="opciones" [(ngModel)]="opciones" name="opciones">
-        </section>
-        <section class="mb-3">
-            <label for="descripcion" class="form-label">Descripción</label>
-            <textarea class="form-control" id="descripcion" [(ngModel)]="descripcion" name="descripcion"></textarea>
-        </section>
-        <section class="mb-3">
-            <label for="tipo" class="form-label">Tipo</label>
-            <select class="form-control" id="tipoId" [(ngModel)]="tipoId" name="tipoId">
-                <option *ngFor="let tipo of tipos" [value]="tipo.id">{{ tipo.materia }}</option>
-              </select>
-          </section>
-        <!-- Botón para insertar un nuevo expediente -->
-        <button type="button" class="btn btn-primary" (click)="insertarExpedientes()" *ngIf="!expedientesParaActualizar">Insertar</button>
+  <!-- Modal para insertar nuevos documentos -->
+  <div class="modal fade" id="nuevoExpedienteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Añadir nuevos Documentos</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
 
-        <!-- Botones para actualizar un expediente existente -->
-        <section *ngIf="expedientesParaActualizar">
-            <button type="button" class="btn btn-warning" (click)="actualizarExpedientes()">Actualizar</button>
-            <button type="button" class="btn btn-light" (click)="cancelarActualizacion()">Cancelar</button>
-        </section>
-    </form>
+            <!-- Formulario para insertar nuevos documentos -->
+            <form (ngSubmit)="insertarExpedientes()">
+                <section class="mb-3">
+                    <label for="codigo" class="form-label">Código</label>
+                    <input type="text" class="form-control" id="codigo" [(ngModel)]="codigo" name="codigo">
+                </section>
+                <section class="mb-3">
+                    <label for="fecha" class="form-label">Fecha</label>
+                    <input type="date" class="form-control" id="fecha" [(ngModel)]="fecha" name="fecha">
+                </section>
+                <section class="mb-3">
+                    <label for="estado" class="form-label">Estado</label>
+                    <select class="form-select" id="estado" [(ngModel)]="estado" name="estado">
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Enviado">Enviado</option>
+                        <option value="Erróneo">Erróneo</option>
+                    </select>
+                </section>
+                <section class="mb-3">
+                    <label for="opciones" class="form-label">Opciones</label>
+                    <input type="text" class="form-control" id="opciones" [(ngModel)]="opciones" name="opciones">
+                </section>
+                <section class="mb-3">
+                    <label for="descripcion" class="form-label">Descripción</label>
+                    <textarea class="form-control" id="descripcion" [(ngModel)]="descripcion" name="descripcion"></textarea>
+                </section>
+                <section class="mb-3">
+                    <label for="tipo" class="form-label">Tipo</label>
+                    <select class="form-control" id="tipoId" [(ngModel)]="tipoId" name="tipoId">
+                        <option *ngFor="let tipo of tipos" [value]="tipo.id">{{ tipo.materia }}</option>
+                    </select>
+                </section>
+                <!-- Botón para insertar un nuevo expediente -->
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Insertar</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Modal para actualizar expedientes -->
+  <div class="modal fade" id="actualizarExpedientesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Actualizar Expedientes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para actualizar expedientes -->
+                <form (ngSubmit)="actualizarExpedientesFormulario()">
+                    <section class="mb-3">
+                        <label for="codigo" class="form-label">Código</label>
+                        <input type="text" class="form-control" id="codigo" [(ngModel)]="codigo" name="codigo">
+                    </section>
+                    <section class="mb-3">
+                        <label for="fecha" class="form-label">Fecha</label>
+                        <input type="date" class="form-control" id="fecha" [(ngModel)]="fecha" name="fecha">
+                    </section>
+                    <section class="mb-3">
+                        <label for="estado" class="form-label">Estado</label>
+                        <select class="form-select" id="estado" [(ngModel)]="estado" name="estado">
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Enviado">Enviado</option>
+                            <option value="Erróneo">Erróneo</option>
+                        </select>
+                    </section>
+                    <section class="mb-3">
+                        <label for="opciones" class="form-label">Opciones</label>
+                        <input type="text" class="form-control" id="opciones" [(ngModel)]="opciones" name="opciones">
+                    </section>
+                    <section class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion" [(ngModel)]="descripcion" name="descripcion"></textarea>
+                    </section>
+                    <section class="mb-3">
+                        <label for="tipo" class="form-label">Tipo</label>
+                        <select class="form-control" id="tipoId" [(ngModel)]="tipoId" name="tipoId">
+                            <option *ngFor="let tipo of tipos" [value]="tipo.id">{{ tipo.materia }}</option>
+                        </select>
+                    </section>
+                    <!-- Botón para insertar un nuevo expediente -->
+    
+                    <button type="submit" class="btn btn-warning" data-bs-dismiss="modal">Actualizar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
     <table class="table mt-3">
         <thead>
@@ -56,7 +133,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let expediente of expedientes">
+            <tr *ngFor="let expediente of expedientesFiltrados">
                 <td>{{ expediente.id }}</td>
                 <td>{{ expediente.codigo }}</td>
                 <td>{{ expediente.fecha }}</td>
@@ -65,11 +142,60 @@
                 <td>{{ expediente.descripcion }}</td>
                 <td>{{ expediente.tipo.materia }}</td>
                 <td>
-                    <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(expediente)">Actualizar</button>
-                    <button class="btn btn-danger btn-sm" (click)="borrarExpedientes(expediente.id)">Borrar</button>
-                    <button class="btn btn-danger btn-sm" (click)="borradoLogicoExpedientes(expediente.id)">Borrado Logico</button>
+                    <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(expediente)" data-bs-toggle="modal" data-bs-target="#actualizarExpedientesModal"><i class="fa-solid fa-pen-to-square fa-xl"></i></button>
+          <button class="btn btn-danger btn-sm" (click)="borradoLogicoExpedientes(expediente.id)"><i class="fa-solid fa-trash fa-xl"></i></button>
                 </td>
             </tr>
         </tbody>
     </table>
-</section>
+
+
+<!-- Modal para la papelera -->
+<div class="modal fade" id="papeleraModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"><i class="fa-solid fa-trash fa-xl"></i>  Papelera</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+
+            <table class="table mt-3">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Código</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Opciones</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let expediente of expedientes">
+                        <td>{{ expediente.id }}</td>
+                        <td>{{ expediente.codigo }}</td>
+                        <td>{{ expediente.fecha }}</td>
+                        <td>{{ expediente.estado }}</td>
+                        <td>{{ expediente.opciones }}</td>
+                        <td>{{ expediente.descripcion }}</td>
+                        <td>{{ expediente.tipo.materia }}</td>
+                        <td>
+                            <button class="btn btn-success btn-sm" (click)="recuperarExpedientes(expediente.id); cargarExpedientes()" >Restaurar <i class="fa-solid fa-trash-can-arrow-up"></i></button>
+                            <button class="btn btn-danger btn-sm" (click)="borrarExpedientes(expediente.id); cargarExpedientes()">Borrar Definitivamente <i class="fa-solid fa-xmark"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+         </div>
+        </div>
+      </div>
+    </div>
+
+<!-- <section *ngIf="expedientesParaActualizar">
+    <button type="button" class="btn btn-warning" (click)="actualizarExpedientes()">Actualizar</button>
+    <button type="button" class="btn btn-light" (click)="cancelarActualizacion()">Cancelar</button>
+</section> -->

@@ -35,6 +35,14 @@ export class ActuacionesService {
       map(actuaciones => actuaciones.filter(actuacion => actuacion.borrado === false))
     );
   }
+    // Muestra toodos los datos
+    consultarActuacionesBorradas(): Observable<Actuaciones[]> {
+      const url = `${this.baseURL}/consultar`;
+      return this.http.get<Actuaciones[]>(url).pipe(
+        // Filtrar los tipos de expediente donde el campo "borrado" sea falso (0)
+        map(actuacionesBorradas => actuacionesBorradas.filter(actuacion => actuacion.borrado === true))
+      );
+    }
   //Consultar entidad Expedientes
   consultarExpedientes(): Observable<Expedientes[]> {
     const url = `${environment.apiURL}/expedientes/consultar`; 
@@ -42,11 +50,12 @@ export class ActuacionesService {
   }
 
   // Actualizar actuaciones
-  // @PutMapping("/actualizar/{id}/{ruta}/{tasa}")
-  actualizarActuaciones(id: number,descripcion: string, finalizado: boolean, fecha: string, expedienteId: number): Observable<Actuaciones> {
-    const url = `${this.baseURL}/actualizar/${id}/${descripcion}/${finalizado}/${fecha}/${expedienteId}`;
+  // @PutMapping("/actualizar/{id}/{rufinalizado}/{fecha}")
+  actualizarActuaciones(id: number, descripcion: string, finalizado: boolean, fecha: string): Observable<Actuaciones> {
+    const url = `${this.baseURL}/actualizar/${id}/${descripcion}/${finalizado}/${fecha}`;
     return this.http.put<Actuaciones>(url, {});
   }
+  
 
   // Borrar actuaciones
   // @DeleteMapping("/borrar/{id}")
@@ -62,13 +71,12 @@ export class ActuacionesService {
     return this.http.put<void>(url, {});
   }
 
+
+  // Recuperacion actuaciones
+  // @PutMapping("/recuperarActuaciones/{id}")
+  recuperarActuaciones(id: number): Observable<void> {
+    const url = `${this.baseURL}/recuperarActuacion/${id}`;
+    return this.http.put<void>(url, {});
+  }
   
 }
-
-
-
-// Consulta para ver todas las actuaciones
-//consultarActuaciones(): Observable<Actuaciones[]> {
-//  const url = `${this.baseURL}/consultar`;
-//  return this.http.get<Actuaciones[]>(url);
-//}

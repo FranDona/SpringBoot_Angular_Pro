@@ -80,11 +80,6 @@ export class DocumentosService {
     return this.http.put<void>(url, {});
   }
 
-  // Consulta general con todos los datos
-  //consultarDocumentos(): Observable<Documentos[]> {
-  //  const url = `${this.baseURL}/consultar`;
-  //  return this.http.get<Documentos[]>(url);
-  //}
 
 
 }

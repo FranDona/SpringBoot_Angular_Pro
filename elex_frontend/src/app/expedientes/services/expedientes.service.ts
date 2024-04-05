@@ -34,8 +34,16 @@ export class ExpedientesService {
       // Filtrar los tipos de expediente donde el campo "borrado" sea falso (0)
       map(expedientes => expedientes.filter(expediente => expediente.borrado === false))
     );
-    }
+  }
   
+  consultarExpedientesBorrados(): Observable<Expedientes[]> {
+    const url = `${this.baseURL}/consultar`;
+    return this.http.get<Expedientes[]>(url).pipe(
+      // Filtrar los tipos de expediente donde el campo "borrado" sea falso (0)
+      map(expedientesBorrados => expedientesBorrados.filter(expediente => expediente.borrado === true))
+    );
+  }
+
   // Consultar entidad TiposExpedientes
   consultarTipos(): Observable<Tipos[]> {
     const url = `${environment.apiURL}/tipos_expediente/consultar`; 
@@ -60,6 +68,11 @@ export class ExpedientesService {
   // @DeleteMapping("/borrarLogico/{id}")
   borradoLogicoExpedientes(id: number): Observable<void> {
     const url = `${this.baseURL}/borrarLogico/${id}`;
+    return this.http.put<void>(url, {});
+  }
+
+  recuperarExpedientes(id: number): Observable<void> {
+    const url = `${this.baseURL}/recuperarExpedientes/${id}`;
     return this.http.put<void>(url, {});
   }
 }

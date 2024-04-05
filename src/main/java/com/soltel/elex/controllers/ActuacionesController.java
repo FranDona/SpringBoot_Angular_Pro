@@ -68,19 +68,37 @@ public class ActuacionesController {
     
     
 
-    @PutMapping("/actualizar/{id}")
-    public ResponseEntity<ActuacionesModel> actualizarActuacion(@PathVariable int id, @RequestBody ActuacionesModel actuacionActualizada) {
-        // Verificar si la actuación existente está presente en la base de datos
-        Optional<ActuacionesModel> actuacionExistente = actuacionesService.obtenerActuacionesPorId(id);
-        if (actuacionExistente.isPresent()) {
-            // Actualizar la actuación con los datos proporcionados
-            actuacionActualizada.setId(id);
-            ActuacionesModel actuacionActualizadaBD = actuacionesService.actualizarActuaciones(actuacionActualizada);
-            return ResponseEntity.ok(actuacionActualizadaBD);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @PutMapping("/actualizar/{id}/{descripcion}/{finalizado}/{fecha}")
+public ResponseEntity<ActuacionesModel> actualizarActuacion(@PathVariable int id,
+                                                            @PathVariable String descripcion,
+                                                            @PathVariable boolean finalizado,
+                                                            @PathVariable String fecha) {
+    // Convertir la cadena de fecha al tipo LocalDate
+    LocalDate fechaActualizada = LocalDate.parse(fecha);
+
+    // Verificar si la actuación existente está presente en la base de datos
+    Optional<ActuacionesModel> actuacionExistente = actuacionesService.obtenerActuacionesPorId(id);
+    if (actuacionExistente.isPresent()) {
+        ActuacionesModel actuacion = actuacionExistente.get();
+
+        // Actualizar todos los campos de la actuación con los valores proporcionados
+        actuacion.setDescripcion(descripcion);
+        actuacion.setFinalizado(finalizado);
+        actuacion.setFecha(fechaActualizada); // Establecer la nueva fecha
+
+        // Actualizar la actuación en el servicio
+        ActuacionesModel actuacionActualizada = actuacionesService.actualizarActuaciones(actuacion);
+
+        // Retornar la respuesta con la actuación actualizada
+        return ResponseEntity.ok(actuacionActualizada);
+    } else {
+        return ResponseEntity.notFound().build();
     }
+}
+
+
+
+
 
     @DeleteMapping("/borrar/{id}")
     public ResponseEntity<Void> borrarActuacion(@PathVariable int id) {
