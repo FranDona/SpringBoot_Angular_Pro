@@ -1,3 +1,8 @@
+<!-- Spinner de carga -->
+<div class="spinner-border spinner-border-lg text-primary position-fixed top-50 start-50 translate-middle" role="status" *ngIf="loading">
+  <span class="visually-hidden">Loading...</span>
+</div>
+
 <section class="container mt-3 w-75">
   <!-- Botón para mostrar el modal de añadir nuevos documentos -->
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoDocumentoModal">
@@ -6,8 +11,9 @@
 
   <!-- Botón para mostrar la papelera -->
   <button type="button" class="btn btn-secondary m-2" data-bs-toggle="modal" data-bs-target="#papeleraModal">
-      <i class="fa-solid fa-trash fa-lg"></i> Papelera
-  </button>
+    <i class="fa-solid fa-trash fa-lg"></i> Papelera
+</button>
+
   
   <div class="input-group mb-3 w-25">
     <input type="text" class="form-control w-25" placeholder="Buscar por codigo" [(ngModel)]="searchTerm" (keyup)="filtrarDocumentos(searchTerm)">
@@ -72,7 +78,10 @@
                     <input type="number" class="form-control" id="tasaActualizar" [(ngModel)]="tasaActualizar" name="tasaActualizar">
                   </section>
 
-                  <button type="submit" class="btn btn-warning" data-bs-dismiss="modal">Actualizar</button>
+                  <button type="submit" class="btn btn-warning m-1"  data-bs-dismiss="modal">Actualizar</button>
+
+                  <button type="button" class="btn btn-secondary m-1" data-bs-dismiss="modal">Cancelar</button>
+
                 </form>
             </div>
         </div>

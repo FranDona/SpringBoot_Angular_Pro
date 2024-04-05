@@ -25,6 +25,7 @@ export class FormulariosDocumentosComponent implements OnInit {
   documentosParaActualizar: Documentos | null = null;
   searchControl: FormControl = new FormControl('');
   searchTerm: string = '';
+  loading: boolean = false;
 
   constructor(private servicio: DocumentosService, private snackBar: MatSnackBar) {}
 
@@ -38,25 +39,30 @@ export class FormulariosDocumentosComponent implements OnInit {
   }
 
   cargarDocumentos(): void {
+    this.loading = true;
     this.servicio.consultarDocumentos().subscribe(datos => {
       this.documentos = datos;
       this.filtrarDocumentos(this.searchTerm);
+      this.loading = false; // Ocultar el spinner de carga
     });
   }
 
   cargarDocumentosBorrados(): void {
+    this.loading = true; // Mostrar el spinner de carga
     this.servicio.consultarDocumentosBorrados().subscribe(datos => {
       this.documentosBorrados = datos;
     });
   }
 
   cargarExpedientes(): void {
+    this.loading = true;
     this.servicio.consultarExpedientes().subscribe(expedientes => {
       this.expedientes = expedientes;
     });
   }
 
   insertarDocumentos(): void {
+    this.loading = true;
     this.servicio.insertarDocumentos(this.ruta, this.tasa, this.expedienteId).subscribe(
       () => {
         this.mensaje = 'Documento Insertado';
@@ -76,6 +82,7 @@ export class FormulariosDocumentosComponent implements OnInit {
 
 
   actualizarDocumentosFormulario(): void {
+    this.loading = true;
     if (this.documentosParaActualizar && this.rutaActualizar && this.tasaActualizar) {
       this.servicio.actualizarDocumentos(this.documentosParaActualizar.id, this.rutaActualizar, this.tasaActualizar).subscribe(
         () => {
@@ -107,22 +114,25 @@ export class FormulariosDocumentosComponent implements OnInit {
   }
 
   cancelarActualizacion(): void {
+    this.loading = true;
     this.documentosParaActualizar = null;
     this.resetFormulario();
   }
 
   resetFormulario(): void {
+    this.loading = true;
     this.ruta = '';
     this.tasa = 0;
     this.expedienteId = 0;
   }
   borrarDocumentos(id: number): void {
+    this.loading = true;
     if (confirm('¿Estás seguro de querer borrar este documento?')) {
       this.servicio.borrarDocumentos(id).subscribe(
         () => {
           this.mensaje = 'Documento borrado';
           this.snackBar.open('Documento borrado correctamente', 'Cerrar', {
-            duration: 3000,
+            duration: 5000, // Duración extendida a 5 segundos
             horizontalPosition: 'center',
             verticalPosition: 'bottom'
           });
@@ -131,7 +141,7 @@ export class FormulariosDocumentosComponent implements OnInit {
         },
         (error) => {
           this.snackBar.open('Error al borrar el documento', 'Cerrar', {
-            duration: 3000,
+            duration: 5000, // Duración extendida a 5 segundos
             horizontalPosition: 'center',
             verticalPosition: 'bottom'
           });
@@ -141,17 +151,22 @@ export class FormulariosDocumentosComponent implements OnInit {
   }
 
   borradoLogicoDocumentos(id: number): void {
+    this.loading = true;
     if (confirm('¿Estás seguro de querer borrar lógicamente este documento?')) {
       this.servicio.borradoLogicoDocumentos(id).subscribe(
         () => {
           this.mensaje = 'Documento borrado lógicamente';
+          this.snackBar.open('Documento borrado lógicamente correctamente', 'Cerrar', {
+            duration: 5000, // Duración extendida a 5 segundos
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom'
+          });
           this.cargarDocumentosBorrados(); // Cambio aquí
           this.cargarDocumentos(); // También puedes cargar la lista de documentos si es necesario
         },
         (error) => {
-          console.error('Error al borrar lógicamente el documento:', error);
           this.snackBar.open('Error al borrar lógicamente el documento', 'Cerrar', {
-            duration: 3000,
+            duration: 5000, // Duración extendida a 5 segundos
             horizontalPosition: 'center',
             verticalPosition: 'bottom'
           });
@@ -167,6 +182,7 @@ export class FormulariosDocumentosComponent implements OnInit {
             horizontalPosition: 'center',
             verticalPosition: 'bottom'
         });
+        this.loading = true;
         this.cargarDocumentosBorrados();
         this.cargarDocumentos();
     });

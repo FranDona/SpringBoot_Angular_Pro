@@ -51,7 +51,7 @@ COMMENT "Tabla de Actuaciones";
 /* 4. Tabla documentos*/
 CREATE TABLE IF NOT EXISTS documentos (
     id INT NOT NULL UNIQUE AUTO_INCREMENT,
-    ruta VARCHAR(50) NOT NULL,
+    ruta VARCHAR(50) NULL,
     tasa DOUBLE(6,2) NOT NULL,
     expediente INT NOT NULL,
     borrado BOOLEAN NOT NULL DEFAULT 0,
@@ -63,9 +63,9 @@ COMMENT "Tabla de Documentos";
 
 -- Insertar datos en la tabla tipos_expediente
 INSERT INTO tipos_expediente (materia, borrado) VALUES
-('Materia1', false),
-('Materia2', false),
-('Materia3', false);
+('Matrimonio', false),
+('Militar', false),
+('Judicial', false);
 
 -- Insertar datos en la tabla expedientes
 INSERT INTO expedientes (codigo, fecha, estado, opciones, descripcion, tipo, borrado) VALUES
@@ -80,7 +80,8 @@ INSERT INTO actuaciones (descripcion, finalizado, fecha, expediente, borrado) VA
 ('Actuación3', false, '2024-03-22', 3, false);
 
 -- Insertar datos en la tabla documentos
-INSERT INTO documentos (ruta, tasa, expediente, borrado) VALUES
-('ruta1', 100.00, 1, false),
-('ruta2', 200.00, 2, false),
-('ruta3', 300.00, 3, false);
+INSERT INTO documentos (tasa, expediente, borrado) VALUES
+(100.00, 1, false),
+(200.00, 2, false),
+(300.00, 3, false);
+
