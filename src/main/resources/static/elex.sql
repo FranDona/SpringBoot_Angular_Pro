@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS tipos_expediente (
     id INT NOT NULL UNIQUE AUTO_INCREMENT,
     materia VARCHAR(20) UNIQUE NOT NULL,
     borrado BOOLEAN NOT NULL DEFAULT 0,
-    fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY pk_tipos_expediente (id)
 )
 COMMENT "Tabla Principal Tipos -> Expedientes";
@@ -23,11 +22,10 @@ CREATE TABLE IF NOT EXISTS expedientes (
     codigo VARCHAR(50) NOT NULL UNIQUE,
     fecha DATE NOT NULL,
     estado ENUM('Pendiente','Enviado', 'Erróneo') DEFAULT 'Pendiente',
-    opciones VARCHAR(70) DEFAULT "",
+    opciones ENUM('Sin Definir','Datos Personales', 'Información laboral', 'Información médica', 'Información educativa', 'Información financiera', 'Información de empleo', 'Información legal') DEFAULT 'Sin Definir',
     descripcion VARCHAR(255) NOT NULL,
     tipo INT NOT NULL,
     borrado BOOLEAN NOT NULL DEFAULT 0,
-    fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (tipo) REFERENCES tipos_expediente (id),
     PRIMARY KEY pk_expedientes (id)
 )
@@ -41,7 +39,6 @@ CREATE TABLE IF NOT EXISTS actuaciones (
     fecha DATE NOT NULL,
     expediente INT NOT NULL,
     borrado BOOLEAN NOT NULL DEFAULT 0,
-    fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (expediente) REFERENCES expedientes (id),
     PRIMARY KEY pk_actuaciones (id)
 )
@@ -55,7 +52,6 @@ CREATE TABLE IF NOT EXISTS documentos (
     tasa DOUBLE(6,2) NOT NULL,
     expediente INT NOT NULL,
     borrado BOOLEAN NOT NULL DEFAULT 0,
-    fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (expediente) REFERENCES expedientes (id),
     PRIMARY KEY pk_documentos (id)
 )
@@ -69,9 +65,9 @@ INSERT INTO tipos_expediente (materia, borrado) VALUES
 
 -- Insertar datos en la tabla expedientes
 INSERT INTO expedientes (codigo, fecha, estado, opciones, descripcion, tipo, borrado) VALUES
-('COD001', '2024-03-20', 'Pendiente', 'Opciones1', 'Descripción1', 1, false),
-('COD002', '2024-03-21', 'Enviado', 'Opciones2', 'Descripción2', 2, false),
-('COD003', '2024-03-22', 'Erróneo', 'Opciones3', 'Descripción3', 3, false);
+('COD001', '2024-03-20', 'Pendiente', 'Información legal', 'Descripción1', 1, false),
+('COD002', '2024-03-21', 'Enviado', 'Información educativa', 'Descripción2', 2, false),
+('COD003', '2024-03-22', 'Erróneo', 'Información laboral', 'Descripción3', 3, false);
 
 -- Insertar datos en la tabla actuaciones
 INSERT INTO actuaciones (descripcion, finalizado, fecha, expediente, borrado) VALUES

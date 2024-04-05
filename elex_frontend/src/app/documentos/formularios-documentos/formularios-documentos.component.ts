@@ -26,6 +26,7 @@ export class FormulariosDocumentosComponent implements OnInit {
   searchControl: FormControl = new FormControl('');
   searchTerm: string = '';
   loading: boolean = false;
+  contadorDocumentos: number = 1;
 
   constructor(private servicio: DocumentosService, private snackBar: MatSnackBar) {}
 
@@ -63,7 +64,8 @@ export class FormulariosDocumentosComponent implements OnInit {
 
   insertarDocumentos(): void {
     this.loading = true;
-    this.servicio.insertarDocumentos(this.ruta, this.tasa, this.expedienteId).subscribe(
+    const rutaGenerada = this.generarRuta(); // Genera la ruta automáticamente
+    this.servicio.insertarDocumentos(rutaGenerada, this.tasa, this.expedienteId).subscribe(
       () => {
         this.mensaje = 'Documento Insertado';
         this.cargarDocumentos();
@@ -79,10 +81,14 @@ export class FormulariosDocumentosComponent implements OnInit {
     );
   }
 
-
+  generarRuta(): string {
+    const rutaBase = 'ruta-pdf';
+    const numeroDocumento = this.contadorDocumentos.toString().padStart(3, '0'); // Asegura que el número tenga tres dígitos (por ejemplo, 001, 002, etc.)
+    this.contadorDocumentos++; // Incrementa el contador para el próximo documento
+    return rutaBase + numeroDocumento;
+  }
 
   actualizarDocumentosFormulario(): void {
-    this.loading = true;
     if (this.documentosParaActualizar && this.rutaActualizar && this.tasaActualizar) {
       this.servicio.actualizarDocumentos(this.documentosParaActualizar.id, this.rutaActualizar, this.tasaActualizar).subscribe(
         () => {
@@ -151,11 +157,11 @@ export class FormulariosDocumentosComponent implements OnInit {
   }
 
   borradoLogicoDocumentos(id: number): void {
-    this.loading = true;
     if (confirm('¿Estás seguro de querer borrar lógicamente este documento?')) {
       this.servicio.borradoLogicoDocumentos(id).subscribe(
         () => {
           this.mensaje = 'Documento borrado lógicamente';
+          this.loading = true;
           this.snackBar.open('Documento borrado lógicamente correctamente', 'Cerrar', {
             duration: 5000, // Duración extendida a 5 segundos
             horizontalPosition: 'center',

@@ -1,5 +1,5 @@
 <!-- Spinner de carga -->
-<div class="spinner-border spinner-border-lg text-primary position-fixed top-50 start-50 translate-middle" role="status" *ngIf="loading">
+<div class="spinner-border text-primary position-fixed top-50 start-50 " style="width: 150px; height: 150px; border-width: 10px;" role="status" *ngIf="loading">
   <span class="visually-hidden">Loading...</span>
 </div>
 
@@ -34,10 +34,6 @@
           <!-- Formulario para insertar nuevos documentos -->
           <form (ngSubmit)="insertarDocumentos()">
             <section class="mb-3">
-              <label for="ruta" class="form-label">Ruta PDF</label>
-              <input type="text" class="form-control" id="ruta" [(ngModel)]="ruta" name="ruta">
-            </section>
-            <section class="mb-3">
               <label for="tasa" class="form-label">Precio</label>
               <input type="number" class="form-control" id="tasa" [(ngModel)]="tasa" name="tasa">
             </section>
@@ -69,7 +65,7 @@
                   <!-- Campo para la ruta -->
                   <section class="form-group mb-3">
                     <label for="rutaActualizar" class="form-label">Nueva Ruta PDF</label>
-                    <input type="text" class="form-control" id="rutaActualizar" [(ngModel)]="rutaActualizar" name="rutaActualizar">
+                    <input type="text" class="form-control" id="rutaActualizar" [(ngModel)]="rutaActualizar" name="rutaActualizar" >
                   </section>
 
                   <!-- Campo para la tasa -->

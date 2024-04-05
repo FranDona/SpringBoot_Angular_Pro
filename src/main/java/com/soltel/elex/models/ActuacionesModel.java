@@ -2,7 +2,6 @@ package com.soltel.elex.models;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,7 +11,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
-import java.sql.Timestamp;
 
 @Entity
 @Table(name = "actuaciones")
@@ -34,9 +32,6 @@ public class ActuacionesModel {
     private ExpedientesModel expediente;
 
     private boolean borrado;
-
-    @Column(name = "fecha_creacion", nullable = true, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp fechaCreacion;
 
 
     // Getter y Setter
@@ -88,27 +83,17 @@ public class ActuacionesModel {
         this.borrado = borrado;
     }
 
-    public Timestamp getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(Timestamp fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
-
     // Constructor
     public ActuacionesModel() {
     }
 
     public ActuacionesModel(int id, String descripcion, boolean finalizado, LocalDate fecha, ExpedientesModel expediente,
-            boolean borrado, Timestamp fechaCreacion) {
+            boolean borrado) {
         this.id = id;
         this.descripcion = descripcion;
         this.finalizado = finalizado;
         this.fecha = fecha;
         this.expediente = expediente;
         this.borrado = borrado;
-        this.fechaCreacion = fechaCreacion;
     }
 }

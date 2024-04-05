@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import java.sql.Timestamp;
 
 @Entity
 @Table(name = "tipos_expediente")
@@ -23,8 +22,6 @@ public class TiposExpedienteModel {
     // Establecer el valor por defecto como false para borrado
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean borrado;
-
-    private Timestamp fechaCreacion;
 
     // Getter y Setter
     
@@ -52,25 +49,16 @@ public class TiposExpedienteModel {
         this.borrado = borrado;
     }
 
-    public Timestamp getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(Timestamp fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
 
     // Constructor
 
     public TiposExpedienteModel() {
     }
 
-    public TiposExpedienteModel(int id, String materia, boolean borrado, Timestamp fechaCreacion) {
+    public TiposExpedienteModel(int id, String materia, boolean borrado) {
         this.id = id;
         this.materia = materia;
         this.borrado = borrado;
-        this.fechaCreacion = fechaCreacion;
     }
 
 }

@@ -9,7 +9,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-import java.sql.Timestamp;
 
 @Entity
 @Table(name = "documentos")
@@ -19,6 +18,7 @@ public class DocumentosModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = true)
     private String ruta;
 
     private double tasa;
@@ -28,9 +28,6 @@ public class DocumentosModel {
     private ExpedientesModel expediente;
 
     private boolean borrado;
-
-    @Column(name = "fecha_creacion", nullable = true, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp fechaCreacion;
 
     
     // Getter y Setter
@@ -70,26 +67,16 @@ public class DocumentosModel {
         this.borrado = borrado;
     }
 
-    public Timestamp getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(Timestamp fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
     
     // Constructor
     public DocumentosModel() {
     }
 
-    public DocumentosModel(int id, String ruta, double tasa, ExpedientesModel expediente, boolean borrado,
-            Timestamp fechaCreacion) {
+    public DocumentosModel(int id, String ruta, double tasa, ExpedientesModel expediente, boolean borrado) {
         this.id = id;
         this.ruta = ruta;
         this.tasa = tasa;
         this.expediente = expediente;
         this.borrado = borrado;
-        this.fechaCreacion = fechaCreacion;
     }
 }

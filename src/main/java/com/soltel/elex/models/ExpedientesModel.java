@@ -1,7 +1,6 @@
 package com.soltel.elex.models;
 
 import jakarta.persistence.Column;
-import java.time.Instant; // Importar la clase Instant
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,9 +37,6 @@ public class ExpedientesModel {
     // Establecer el valor por defecto como false para borrado
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean borrado;
-
-    @Column(name = "fecha_creacion", nullable = true, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Instant fechaCreacion; // Usar Instant en lugar de Timestamp
 
     // Getter y Setter
     public int getId() {
@@ -107,20 +103,12 @@ public class ExpedientesModel {
         this.borrado = borrado;
     }
 
-    public Instant getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(Instant fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
     // Constructor
     public ExpedientesModel() {
     }
 
     public ExpedientesModel(int id, String codigo, LocalDate fecha, String estado, String opciones, String descripcion,
-            TiposExpedienteModel tipo, boolean borrado, Instant fechaCreacion) {
+            TiposExpedienteModel tipo, boolean borrado) {
         this.id = id;
         this.codigo = codigo;
         this.fecha = fecha;
@@ -129,7 +117,6 @@ public class ExpedientesModel {
         this.descripcion = descripcion;
         this.tipo = tipo;
         this.borrado = borrado;
-        this.fechaCreacion = fechaCreacion;
     }
 
 }
