@@ -1,3 +1,8 @@
+<!-- Spinner de carga -->
+<div class="spinner-border text-primary position-fixed top-50 start-50 " style="width: 150px; height: 150px; border-width: 10px;" role="status" *ngIf="loading">
+    <span class="visually-hidden">Loading...</span>
+</div>
+
 <section class="container mt-3 w-75">
     <!-- Botón para mostrar el modal de añadir nuevos documentos -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoExpedienteModal">
@@ -45,8 +50,17 @@
                     </select>
                 </section>
                 <section class="mb-3">
-                    <label for="opciones" class="form-label">Opciones</label>
-                    <input type="text" class="form-control" id="opciones" [(ngModel)]="opciones" name="opciones">
+                    <label for="estado" class="form-label">Opciones</label>
+                    <select class="form-select" id="opciones" [(ngModel)]="opciones" name="opciones">
+                        <option value="Sin Definir">Sin Definir</option>
+                        <option value="Datos Personales">Datos Personales</option>
+                        <option value="Información laboral">Información laboral</option>
+                        <option value="Información médica">Información médica</option>
+                        <option value="Información educativa">Información educativa</option>
+                        <option value="Información financiera">Información financiera</option>
+                        <option value="Información de empleo">Información de empleo</option>
+                        <option value="Información legal">Información legal</option>
+                    </select>
                 </section>
                 <section class="mb-3">
                     <label for="descripcion" class="form-label">Descripción</label>
@@ -96,15 +110,24 @@
                         </select>
                     </section>
                     <section class="mb-3">
-                        <label for="opciones" class="form-label">Opciones</label>
-                        <input type="text" class="form-control" id="opciones" [(ngModel)]="opciones" name="opciones">
+                        <label for="estado" class="form-label">Opciones</label>
+                        <select class="form-select" id="opciones" [(ngModel)]="opciones" name="opciones">
+                            <option value="Sin Definir">Sin Definir</option>
+                            <option value="Datos Personales">Datos Personales</option>
+                            <option value="Información laboral">Información laboral</option>
+                            <option value="Información médica">Información médica</option>
+                            <option value="Información educativa">Información educativa</option>
+                            <option value="Información financiera">Información financiera</option>
+                            <option value="Información de empleo">Información de empleo</option>
+                            <option value="Información legal">Información legal</option>
+                        </select>
                     </section>
                     <section class="mb-3">
                         <label for="descripcion" class="form-label">Descripción</label>
                         <textarea class="form-control" id="descripcion" [(ngModel)]="descripcion" name="descripcion"></textarea>
                     </section>
                     <section class="mb-3">
-                        <label for="tipo" class="form-label">Tipo</label>
+                        <label for="tipo" class="form-label">Tipo <span>(Si el tipo de expediente que buscas no aparece, añadelo <a href="localhost:4200/tipos_expedientes">aqui</a>)</span> </label>
                         <select class="form-control" id="tipoId" [(ngModel)]="tipoId" name="tipoId">
                             <option *ngFor="let tipo of tipos" [value]="tipo.id">{{ tipo.materia }}</option>
                         </select>
@@ -136,7 +159,7 @@
             <tr *ngFor="let expediente of expedientesFiltrados">
                 <td>{{ expediente.id }}</td>
                 <td>{{ expediente.codigo }}</td>
-                <td>{{ expediente.fecha }}</td>
+                <td>{{ expediente.fecha | date:'dd / MMMM / yyyy' }}</td>
                 <td>{{ expediente.estado }}</td>
                 <td>{{ expediente.opciones }}</td>
                 <td>{{ expediente.descripcion }}</td>

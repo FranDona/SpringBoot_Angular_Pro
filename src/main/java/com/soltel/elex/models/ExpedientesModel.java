@@ -11,6 +11,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Table(name = "expedientes")
 public class ExpedientesModel {
@@ -22,6 +24,7 @@ public class ExpedientesModel {
     @Column(unique = true)
     private String codigo;
 
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate fecha;
 
     private String estado;

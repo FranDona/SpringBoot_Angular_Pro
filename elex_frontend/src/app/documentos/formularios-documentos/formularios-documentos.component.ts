@@ -44,12 +44,12 @@ export class FormulariosDocumentosComponent implements OnInit {
     this.servicio.consultarDocumentos().subscribe(datos => {
       this.documentos = datos;
       this.filtrarDocumentos(this.searchTerm);
-      this.loading = false; // Ocultar el spinner de carga
+      this.loading = false; 
     });
   }
 
   cargarDocumentosBorrados(): void {
-    this.loading = true; // Mostrar el spinner de carga
+    this.loading = true; 
     this.servicio.consultarDocumentosBorrados().subscribe(datos => {
       this.documentosBorrados = datos;
     });
@@ -138,7 +138,7 @@ export class FormulariosDocumentosComponent implements OnInit {
         () => {
           this.mensaje = 'Documento borrado';
           this.snackBar.open('Documento borrado correctamente', 'Cerrar', {
-            duration: 5000, // Duración extendida a 5 segundos
+            duration: 5000, 
             horizontalPosition: 'center',
             verticalPosition: 'bottom'
           });
@@ -147,7 +147,7 @@ export class FormulariosDocumentosComponent implements OnInit {
         },
         (error) => {
           this.snackBar.open('Error al borrar el documento', 'Cerrar', {
-            duration: 5000, // Duración extendida a 5 segundos
+            duration: 5000,
             horizontalPosition: 'center',
             verticalPosition: 'bottom'
           });
@@ -167,8 +167,8 @@ export class FormulariosDocumentosComponent implements OnInit {
             horizontalPosition: 'center',
             verticalPosition: 'bottom'
           });
-          this.cargarDocumentosBorrados(); // Cambio aquí
-          this.cargarDocumentos(); // También puedes cargar la lista de documentos si es necesario
+          this.cargarDocumentosBorrados(); 
+          this.cargarDocumentos(); 
         },
         (error) => {
           this.snackBar.open('Error al borrar lógicamente el documento', 'Cerrar', {

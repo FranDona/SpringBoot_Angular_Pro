@@ -29,6 +29,8 @@ export class FormulariosExpedientesComponent implements OnInit {
   tipoId: number = 0;
   searchControl: FormControl = new FormControl('');
   searchTerm: string = '';
+  loading: boolean = false;
+
 
   constructor(public servicio: ExpedientesService, private snackBar: MatSnackBar) {}
 
@@ -42,13 +44,16 @@ export class FormulariosExpedientesComponent implements OnInit {
   }
 
   cargarExpedientes(): void {
+    this.loading = true;
     this.servicio.consultarExpedientes().subscribe(datos => {
       this.expedientes = datos;
       this.filtrarExpedientes(this.searchTerm);
+      this.loading = false; 
     });
   }
 
   cargarExpedientesBorrados(): void {
+    this.loading = true;
     this.servicio.consultarExpedientesBorrados().subscribe(datos => {
       this.expedientesBorrados = datos;
     });
@@ -56,6 +61,7 @@ export class FormulariosExpedientesComponent implements OnInit {
   
   
   cargarTipos(): void {
+    this.loading = true;
     this.servicio.consultarTipos().subscribe(tipos => {
       this.tipos = tipos;
     });
@@ -63,6 +69,7 @@ export class FormulariosExpedientesComponent implements OnInit {
   
 
   insertarExpedientes(): void {
+    this.loading = true;
     this.servicio.insertarExpedientes(this.codigo, this.fecha, this.estado, this.opciones, this.descripcion, this.tipoId).subscribe(
       resultado => {
         if (resultado) {
@@ -113,6 +120,7 @@ export class FormulariosExpedientesComponent implements OnInit {
 
 
   cancelarActualizacion(): void {
+    this.loading = true;
     this.expedientesParaActualizar = null;
     this.cargarExpedientes();
     this.expedientesParaActualizar = null;
@@ -126,6 +134,7 @@ export class FormulariosExpedientesComponent implements OnInit {
 
     // Y el borrado...
     borrarExpedientes(id: number): void {
+      this.loading = true;
       if (confirm('¿Estás seguro de querer borrar este expediente?')) {
         this.servicio.borrarExpedientes(id).subscribe(
           () => {
@@ -150,11 +159,27 @@ export class FormulariosExpedientesComponent implements OnInit {
     }
 
     borradoLogicoExpedientes(id: number): void {
-      if (confirm("¿Estás seguro de querer borrar lógicamente este expediente?")) {
-        this.servicio.borradoLogicoExpedientes(id).subscribe(() => {
-          this.mensaje = "Expediente borrado lógicamente";
-          this.cargarExpedientes();
-        });
+      if (confirm('¿Estás seguro de querer borrar lógicamente este expediente?')) {
+        this.servicio.borradoLogicoExpedientes(id).subscribe(
+          () => {
+            this.mensaje = 'Documento borrado lógicamente';
+            this.loading = true;
+            this.snackBar.open('Documento borrado lógicamente correctamente', 'Cerrar', {
+              duration: 5000, 
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom'
+            });
+            this.cargarExpedientesBorrados(); 
+            this.cargarExpedientes(); 
+          },
+          (error) => {
+            this.snackBar.open('Error al borrar lógicamente el expediente', 'Cerrar', {
+              duration: 5000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom'
+            });
+          }
+        );
       }
     }
 
@@ -166,6 +191,7 @@ export class FormulariosExpedientesComponent implements OnInit {
               horizontalPosition: 'center',
               verticalPosition: 'bottom'
           });
+          this.loading = true;
           this.cargarExpedientesBorrados();
           this.cargarExpedientes();
       });

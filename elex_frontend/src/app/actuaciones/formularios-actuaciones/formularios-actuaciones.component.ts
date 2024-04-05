@@ -31,6 +31,7 @@ export class FormulariosActuacionesComponent implements OnInit {
   actuacionesParaActualizar: Actuaciones | null = null;
   searchControl: FormControl = new FormControl('');
   searchTerm: string = '';
+  loading: boolean = false;
 
   // Inyectar "private snackBar: MatSnackBar para Angular Material
   constructor(private servicio: ActuacionesService, private snackBar: MatSnackBar) {}
@@ -45,25 +46,30 @@ export class FormulariosActuacionesComponent implements OnInit {
   }
 
   cargarActuaciones(): void {
+    this.loading = true;
     this.servicio.consultarActuaciones().subscribe(datos => {
       this.actuaciones = datos;
       this.filtrarActuaciones(this.searchTerm);
+      this.loading = false;
     });
   }
 
   cargarActuacionesBorradas(): void {
+    this.loading = true;
     this.servicio.consultarActuacionesBorradas().subscribe(datos => {
       this.actuacionesBorradas = datos;
     });
   }
 
   cargarExpedientes(): void {
+    this.loading = true;
     this.servicio.consultarExpedientes().subscribe(expedientes => {
       this.expedientes = expedientes;
     });
   }
 
   insertarActuaciones(): void {
+    this.loading = true;
     this.servicio.insertarActuaciones(this.descripcion, this.finalizado, this.fecha, this.expedienteId).subscribe(resultado => {
       if (resultado) {
         this.mensaje = "Actuacion Insertada";
@@ -123,10 +129,12 @@ export class FormulariosActuacionesComponent implements OnInit {
   }
 
   cancelarActualizacion(): void {
+    this.loading = true;
     this.actuacionesParaActualizar = null;
     this.resetFormulario();
   }
   resetFormulario(): void {
+    this.loading = true;
     this.descripcion = "";
     this.finalizado = false;
     this.fecha = "";
@@ -134,6 +142,7 @@ export class FormulariosActuacionesComponent implements OnInit {
   }
 
   borrarActuaciones(id: number): void {
+    this.loading = true;
     if (confirm("¿Estás seguro de querer borrar esta actuacion?")) {
       this.servicio.borrarActuaciones(id).subscribe(() => {
         this.mensaje = "Actuacion borrado";
@@ -143,15 +152,32 @@ export class FormulariosActuacionesComponent implements OnInit {
     }
   }
 
+
   borradoLogicoActuaciones(id: number): void {
-    if (confirm("¿Estás seguro de querer borrar lógicamente este tipo?")) {
-      this.servicio.borradoLogicoActuaciones(id).subscribe(() => {
-        this.mensaje = "Actucion borrada lógicamente";
-        this.cargarActuacionesBorradas();
-        this.cargarActuaciones();
-      });
+    if (confirm('¿Estás seguro de querer borrar lógicamente este documento?')) {
+      this.servicio.borradoLogicoActuaciones(id).subscribe(
+        () => {
+          this.mensaje = 'Documento borrado lógicamente';
+          this.loading = true;
+          this.snackBar.open('Documento borrado lógicamente correctamente', 'Cerrar', {
+            duration: 5000, // Duración extendida a 5 segundos
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom'
+          });
+          this.cargarActuacionesBorradas(); 
+          this.cargarActuaciones(); 
+        },
+        (error) => {
+          this.snackBar.open('Error al borrar lógicamente el documento', 'Cerrar', {
+            duration: 5000, // Duración extendida a 5 segundos
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom'
+          });
+        }
+      );
     }
   }
+
 
   recuperarActuaciones(id: number): void {
     this.servicio.recuperarActuaciones(id).subscribe(() => {
@@ -160,6 +186,7 @@ export class FormulariosActuacionesComponent implements OnInit {
             horizontalPosition: 'center',
             verticalPosition: 'bottom'
         });
+        this.loading = true;
         this.cargarActuacionesBorradas();
         this.cargarActuaciones();
     });

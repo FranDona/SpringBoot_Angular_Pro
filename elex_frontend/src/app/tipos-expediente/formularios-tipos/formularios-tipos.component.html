@@ -1,3 +1,8 @@
+<!-- Spinner de carga -->
+<div class="spinner-border text-primary position-fixed top-50 start-50 " style="width: 150px; height: 150px; border-width: 10px;" role="status" *ngIf="loading">
+    <span class="visually-hidden">Loading...</span>
+</div>
+
 <section class="container mt-3 w-75">
     
     <!-- Botón para mostrar el modal de añadir nuevos tipos -->
@@ -33,6 +38,8 @@
                             <label for="materia" class="form-label">Materia</label>
                             <input type="text" class="form-control" id="materia" [(ngModel)]="materia" name="materia">
                         </section>
+                        <!-- Botón para insertar un nuevo documento -->
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Insertar</button>
                     </form>
                 </div>
             </div>

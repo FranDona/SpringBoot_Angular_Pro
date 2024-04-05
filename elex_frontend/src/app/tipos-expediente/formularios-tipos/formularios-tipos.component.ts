@@ -19,6 +19,7 @@ export class FormulariosTiposComponent implements OnInit {
   materiaActualizar: string = '';
   searchTerm: string = '';
   searchControl = new FormControl('');
+  loading: boolean = false;
 
   constructor(private servicio: TiposService, private snackBar: MatSnackBar) {}
 
@@ -31,20 +32,24 @@ export class FormulariosTiposComponent implements OnInit {
   }  
 
   cargarTipos(): void {
+    this.loading = true;
     this.servicio.consultarTipos().subscribe(datos => {
       this.tipos = datos;
-      this.filtrarTipos(); // Aplicar el filtrado inicial
+      this.filtrarTipos();
+      this.loading = false; 
     });
   }
   
 
   cargarTiposBorrados(): void {
+    this.loading = true; 
     this.servicio.consultarTiposBorrados().subscribe(datos => {
       this.tiposBorrados = datos;
     });
   }
 
   insertarTipo(): void {
+    this.loading = true;
     this.servicio.insertarTipo(this.materia).subscribe(
       resultado => {
         if (resultado) {
@@ -79,27 +84,40 @@ export class FormulariosTiposComponent implements OnInit {
   }
 
   cancelarActualizacion(): void {
+    this.loading = true;
     this.tipoParaActualizar = null;
     this.materia = '---';
   }
 
+
   borrarTipo(id: number): void {
-    if (confirm("¿Estás seguro de querer borrar definitivamente este tipo?")) {
-        this.servicio.borrarTipo(id).subscribe(() => {
-            this.mensaje = "Tipo borrado definitivamente";
-            this.cargarTiposBorrados(); 
-            this.cargarTipos();
-            this.snackBar.open('Tipo eliminado definitivamente', 'Cerrar', {
-                duration: 3000,
-                horizontalPosition: 'center',
-                verticalPosition: 'bottom'
-            });
-        });
+    this.loading = true;
+    if (confirm('¿Estás seguro de querer borrar este tipo?')) {
+      this.servicio.borrarTipo(id).subscribe(
+        () => {
+          this.mensaje = 'Documento borrado';
+          this.snackBar.open('Documento borrado correctamente', 'Cerrar', {
+            duration: 5000, 
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom'
+          });
+          this.cargarTiposBorrados();
+          this.cargarTipos();
+        },
+        (error) => {
+          this.snackBar.open('Error al borrar el tipo. ¿Quizás esta en uso?', 'Cerrar', {
+            duration: 5000, 
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom'
+          });
+        }
+      );
     }
   }
   
 
   borradoLogicoTipo(id: number): void {
+    this.loading = true;
     if (confirm("¿Estás seguro de querer borrar lógicamente este tipo?")) {
         this.servicio.borradoLogicoTipo(id).subscribe(() => {
             this.snackBar.open('Tipo borrado lógicamente', 'Cerrar', {
@@ -122,6 +140,7 @@ export class FormulariosTiposComponent implements OnInit {
             horizontalPosition: 'center',
             verticalPosition: 'bottom'
         });
+        this.loading = true;
         this.cargarTiposBorrados();
         this.cargarTipos();
     });

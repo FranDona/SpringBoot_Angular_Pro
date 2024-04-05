@@ -24,7 +24,7 @@ public class ActuacionesModel {
 
     private boolean finalizado;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+
     private LocalDate fecha;
 
     @ManyToOne
