@@ -152,7 +152,7 @@
 
 <!-- Modal para la papelera -->
 <div class="modal fade" id="papeleraModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"> <!-- Utiliza las clases de Bootstrap para controlar el tamaño del modal -->
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel"><i class="fa-solid fa-trash fa-xl"></i>  Papelera</h5>
@@ -168,20 +168,16 @@
                         <th scope="col">Código</th>
                         <th scope="col">Fecha</th>
                         <th scope="col">Estado</th>
-                        <th scope="col">Opciones</th>
-                        <th scope="col">Descripción</th>
                         <th scope="col">Tipo</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let expediente of expedientes">
+                    <tr *ngFor="let expediente of expedientesBorrados">
                         <td>{{ expediente.id }}</td>
                         <td>{{ expediente.codigo }}</td>
                         <td>{{ expediente.fecha }}</td>
                         <td>{{ expediente.estado }}</td>
-                        <td>{{ expediente.opciones }}</td>
-                        <td>{{ expediente.descripcion }}</td>
                         <td>{{ expediente.tipo.materia }}</td>
                         <td>
                             <button class="btn btn-success btn-sm" (click)="recuperarExpedientes(expediente.id); cargarExpedientes()" >Restaurar <i class="fa-solid fa-trash-can-arrow-up"></i></button>

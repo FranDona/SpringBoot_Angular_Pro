@@ -126,11 +126,26 @@ export class FormulariosExpedientesComponent implements OnInit {
 
     // Y el borrado...
     borrarExpedientes(id: number): void {
-      if (confirm("¿Estás seguro de querer borrar este Expediente?")) {
-        this.servicio.borrarExpedientes(id).subscribe(() => {
-          this.mensaje = "Expedientes borrado";
-          this.cargarExpedientes();
-        });
+      if (confirm('¿Estás seguro de querer borrar este expediente?')) {
+        this.servicio.borrarExpedientes(id).subscribe(
+          () => {
+            this.mensaje = 'Expediente borrado';
+            this.snackBar.open('Expediente borrado correctamente', 'Cerrar', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom'
+            });
+            this.cargarExpedientesBorrados();
+            this.cargarExpedientes();
+          },
+          (error) => {
+            this.snackBar.open('Error al borrar el expediente', 'Cerrar', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'bottom'
+            });
+          }
+        );
       }
     }
 
@@ -138,7 +153,7 @@ export class FormulariosExpedientesComponent implements OnInit {
       if (confirm("¿Estás seguro de querer borrar lógicamente este expediente?")) {
         this.servicio.borradoLogicoExpedientes(id).subscribe(() => {
           this.mensaje = "Expediente borrado lógicamente";
-          this.cargarTipos();
+          this.cargarExpedientes();
         });
       }
     }
