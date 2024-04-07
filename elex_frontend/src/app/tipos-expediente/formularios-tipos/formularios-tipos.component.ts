@@ -14,7 +14,7 @@ export class FormulariosTiposComponent implements OnInit {
   tiposBorrados: Tipos[] = [];
   tiposFiltrados: Tipos[] = []; // Definición de la propiedad tiposFiltrados
   mensaje: string = "";
-  materia: string = "---";
+  materia: string = "";
   tipoParaActualizar: Tipos | null = null;
   materiaActualizar: string = '';
   searchTerm: string = '';
