@@ -8,6 +8,7 @@ import { Expedientes } from '../models/expedientes.model';
 import { Tipos } from '../../tipos-expediente/models/tipos.model';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { FormControl } from '@angular/forms';
+import { setThrowInvalidWriteToSignalError } from '@angular/core/primitives/signals';
 
 @Component({
   selector: 'app-formularios-expedientes',
@@ -30,6 +31,11 @@ export class FormulariosExpedientesComponent implements OnInit {
   searchControl: FormControl = new FormControl('');
   searchTerm: string = '';
   loading: boolean = false;
+
+  codigoAutomatico: string = "";
+  codigoPersonalizado: string = "";
+  usarCodigoPersonalizado: boolean = false; // Nuevo atributo para controlar la visibilidad del campo de código personalizado
+  placeholderCodigo = "Codigo Automático"
 
 
   constructor(public servicio: ExpedientesService, private snackBar: MatSnackBar) {}
@@ -70,16 +76,30 @@ export class FormulariosExpedientesComponent implements OnInit {
 
   insertarExpedientes(): void {
     this.loading = true;
-    this.servicio.insertarExpedientes(this.codigo, this.fecha, this.estado, this.opciones, this.descripcion, this.tipoId).subscribe(
+    
+    let codigoGenerado: string;
+    
+    // Verificar si el campo de código está vacío
+    if (!this.codigo.trim()) {
+      // Generar el código automáticamente si el campo está vacío
+      codigoGenerado = this.generarCodigoAutomatico();
+    } else {
+      // Usar el código proporcionado por el usuario si no está vacío
+      codigoGenerado = this.codigo;
+    }
+    
+    // Llamar al servicio para insertar el expediente con el código generado
+    this.servicio.insertarExpedientes(codigoGenerado, this.fecha, this.estado, this.opciones, this.descripcion, this.tipoId).subscribe(
       resultado => {
         if (resultado) {
           this.mensaje = "Expediente Insertado";
           this.cargarExpedientes();
+          this.limpiarFormulario();
         }
       },
       // Manejo de error para mostrar la notificación
       error => {
-        this.snackBar.open('El codigo esta duplicado o se ha usado anteriormente para otro caso', 'Cerrar', {
+        this.snackBar.open('El código está duplicado o se ha utilizado anteriormente para otro expediente', 'Cerrar', {
           duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top'
@@ -87,6 +107,41 @@ export class FormulariosExpedientesComponent implements OnInit {
       }
     );
   }
+  
+  generarCodigoAutomatico(): string {
+    
+    // Obtener el último código de expediente en la lista
+    const ultimoCodigo = this.expedientes.length > 0 ? this.expedientes[this.expedientes.length - 1].codigo : "EXP000";
+    
+    // Extraer el número del código y generar el nuevo número incrementado
+    
+    const numero = parseInt(ultimoCodigo.substring(3));
+    const nuevoNumero = numero + 1;
+    
+    // Formatear el nuevo número y devolver el código generado
+    return "COD" + nuevoNumero.toString().padStart(3, '0');
+  }
+
+  limpiarFormulario(): void {
+  this.codigo = '';
+  this.fecha = '';
+  this.estado = 'Pendiente';
+  this.opciones = '';
+  this.descripcion = '';
+  this.tipoId = 0;
+}
+
+
+  toggleCampoCodigo(): void {
+    this.usarCodigoPersonalizado = !this.usarCodigoPersonalizado; // Cambiar entre true y false
+    this.placeholderCodigo = this.usarCodigoPersonalizado ? 'Código Personalizado' : 'Código Automático';
+    if (!this.usarCodigoPersonalizado) {
+      // Si se está cambiando a usar el código automático, limpiar el valor del código personalizado
+      this.codigoPersonalizado = '';
+    }
+  }
+  
+  
 
     // Atributo tipo que usamos para actualizar
   expedientesParaActualizar: Expedientes | null = null;

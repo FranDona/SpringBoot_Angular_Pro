@@ -35,7 +35,12 @@
             <form (ngSubmit)="insertarExpedientes()">
                 <section class="mb-3">
                     <label for="codigo" class="form-label">Código</label>
-                    <input type="text" class="form-control" id="codigo" [(ngModel)]="codigo" name="codigo">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="codigo" [(ngModel)]="codigo" name="codigo" [disabled]="!usarCodigoPersonalizado" [placeholder]="placeholderCodigo">
+                        <button class="btn btn-outline-secondary" type="button" (click)="toggleCampoCodigo()">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
                 </section>
                 <section class="mb-3">
                     <label for="fecha" class="form-label">Fecha</label>
