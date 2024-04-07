@@ -203,7 +203,6 @@ export class FormulariosActuacionesComponent implements OnInit {
       // Filtrar las actuaciones según el término de búsqueda en varios campos
       this.actuacionesFiltradas = this.actuaciones.filter(actuacion =>
         actuacion.expediente.codigo.toLowerCase().includes(searchTermLowerCase) ||
-        actuacion.expediente.fecha.toLowerCase().includes(searchTermLowerCase) ||
         actuacion.expediente.estado.toLowerCase().includes(searchTermLowerCase)
       );
     }

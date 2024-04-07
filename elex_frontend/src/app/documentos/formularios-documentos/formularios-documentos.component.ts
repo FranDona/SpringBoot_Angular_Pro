@@ -202,7 +202,8 @@ export class FormulariosDocumentosComponent implements OnInit {
     } else {
       // Filtrar los tipos según el término de búsqueda
       this.documentosFiltrados = this.documentos.filter(documento =>
-        documento.expediente.codigo.toLowerCase().includes(searchTerm.toLowerCase())
+        documento.expediente.codigo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        documento.expediente.estado.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
   }

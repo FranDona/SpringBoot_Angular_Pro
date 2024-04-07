@@ -204,7 +204,8 @@ export class FormulariosExpedientesComponent implements OnInit {
       } else {
         // Filtrar los tipos según el término de búsqueda
         this.expedientesFiltrados = this.expedientes.filter(expediente =>
-          expediente.codigo.toLowerCase().includes(searchTerm.toLowerCase())
+          expediente.codigo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          expediente.estado.toLowerCase().includes(searchTerm.toLowerCase())
         );
       }
     }
