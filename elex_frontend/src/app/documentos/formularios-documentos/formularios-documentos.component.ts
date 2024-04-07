@@ -83,8 +83,22 @@ export class FormulariosDocumentosComponent implements OnInit {
 
   generarRuta(): string {
     const rutaBase = 'ruta-pdf';
-    const numeroDocumento = this.contadorDocumentos.toString().padStart(3, '0'); // Asegura que el número tenga tres dígitos (por ejemplo, 001, 002, etc.)
-    this.contadorDocumentos++; // Incrementa el contador para el próximo documento
+    let numeroDocumento = this.contadorDocumentos.toString().padStart(3, '0'); // Asegura que el número tenga tres dígitos (por ejemplo, 001, 002, etc.)
+    
+    // Verificar si la ruta generada ya existe en la lista de documentos
+    let rutaExistente = this.documentos.find(documento => documento.ruta === (rutaBase + numeroDocumento));
+    
+    // Si la ruta generada ya existe, incrementar el contador y volver a verificar hasta encontrar un nombre único
+    while (rutaExistente) {
+      this.contadorDocumentos++;
+      numeroDocumento = this.contadorDocumentos.toString().padStart(3, '0');
+      rutaExistente = this.documentos.find(documento => documento.ruta === (rutaBase + numeroDocumento));
+    }
+  
+    // Incrementa el contador para el próximo documento
+    this.contadorDocumentos++;
+  
+    // Devuelve la ruta única generada
     return rutaBase + numeroDocumento;
   }
 
