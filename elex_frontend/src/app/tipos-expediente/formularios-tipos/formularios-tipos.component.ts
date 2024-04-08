@@ -55,6 +55,7 @@ export class FormulariosTiposComponent implements OnInit {
         if (resultado) {
           this.mensaje = "Tipo insertado";
           this.cargarTipos();
+          this.limpiarFormulario();
         }
       },
       error => {
@@ -65,6 +66,10 @@ export class FormulariosTiposComponent implements OnInit {
         });
       }
     );
+  }
+
+  limpiarFormulario(): void {
+    this.materia = '';
   }
 
   actualizarTipoFormulario(): void {

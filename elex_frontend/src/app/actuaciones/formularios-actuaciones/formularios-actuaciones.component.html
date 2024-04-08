@@ -114,7 +114,7 @@
 </div>
 
 <section class="container mt-3">
-  <!-- Aquí va tu tabla para mostrar las actuaciones -->
+  <!-- Tabla para mostrar las actuaciones -->
   <table class="table mt-3">
       <thead>
           <tr>
@@ -128,7 +128,6 @@
               <th scope="col">Acciones</th>
           </tr>
       </thead>
-      <!-- Modifico la tabla para añadir los botones adicionales -->
       <tbody>
           <tr *ngFor="let actuacion of actuacionesFiltradas">
               <td>{{ actuacion.id }}</td>
@@ -136,11 +135,9 @@
               <td>
                 <span [innerHTML]="actuacion.finalizado ? 'Finalizado <i class=&quot;fa-solid fa-check&quot;></i>' : 'En Curso <i class=&quot;fa-solid fa-hourglass-start&quot;></i>'"></span>
               </td>
-              
-              
-              <td>{{ actuacion.fecha }}</td>
+              <td>{{ actuacion.fecha | date:'dd/MM/yyyy' }}</td>
               <td>{{ actuacion.expediente.codigo }}</td>
-              <td>{{ actuacion.expediente.fecha }}</td>
+              <td>{{ actuacion.expediente.fecha | date:'dd/MM/yyyy' }}</td>
               <td>{{ actuacion.expediente.estado }}</td>
               <td>
                 <button class="btn btn-warning btn-sm" (click)="prepararActualizacion(actuacion)" data-bs-toggle="modal" data-bs-target="#actualizarActuacionesModal"><i class="fa-solid fa-pen-to-square fa-xl"></i></button>
@@ -174,7 +171,6 @@
                   <th scope="col"></th>
               </tr>
           </thead>
-          <!-- Modifico la tabla para añadir los botones adicionales -->
           <tbody>
               <tr *ngFor="let actuacion of actuacionesBorradas">
                   <td>{{ actuacion.id }}</td>
