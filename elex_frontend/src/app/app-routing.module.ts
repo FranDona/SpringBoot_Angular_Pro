@@ -12,7 +12,8 @@ const routes: Routes = [
   { path: 'expedientes', component: FormulariosExpedientesComponent },
   { path: 'documentos', component: FormulariosDocumentosComponent },
   { path: 'actuaciones', component: FormulariosActuacionesComponent },
-  { path: '', redirectTo: '/index', pathMatch: 'full' }, // Ruta por defecto
+  { path: '', redirectTo: '/index', pathMatch: 'full' }, // Redirige a /index cuando la ruta está vacía
+  { path: '**', redirectTo: '/index' }
 ];
 
 @NgModule({
