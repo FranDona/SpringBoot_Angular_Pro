@@ -6,18 +6,18 @@
 
 
 - [elex\_examen\_documentación](#elex_examen_documentación)
-  - [Credenciales aplicaicon](#credenciales-aplicaicon)
+  - [Credenciales aplican](#credenciales-aplican)
   - [Base De Datos elex](#base-de-datos-elex)
 
 
-## Credenciales aplicaicon
-* En el caso de que la apliacion necesite credenciales seran, **usuairo: soltel y clave: admin**.
+## Credenciales aplican
+* En el caso de que la aplicación necesite credenciales serán, **usuario: soltel y clave: admin**.
 
 ## Base De Datos elex
-* Las credenciales para acceder son, usuairo: root y clave: root.
+* Las credenciales para acceder son, usuario: root y clave: root.
 * La base de datos se encuentra en src/main/resources/static/elex.sql
-* Tambien puedes abrirla pulsando [aquí](src/main/resources/static/elex.sql)
-* En caso de no encontrar la bbdd la dejo escrita a continuacion:
+* También puedes abrirla pulsando [aquí](src/main/resources/static/elex.sql)
+* En caso de no encontrar la bbdd la dejo escrita a continuación:
 
 ```sql
 SET sql_mode = 'STRICT_ALL_TABLES';
