@@ -72,7 +72,7 @@
                     <textarea class="form-control" id="descripcion" [(ngModel)]="descripcion" name="descripcion"></textarea>
                 </section>
                 <section class="mb-3">
-                    <label for="tipo" class="form-label">Tipo</label>
+                    <label for="tipo" class="form-label">Tipo <span class="small text-muted">(Si el tipo de expediente que buscas no aparece, añadelo <a href="http://localhost:4200/tipos">aqui</a>)</span></label>
                     <select class="form-control" id="tipoId" [(ngModel)]="tipoId" name="tipoId">
                         <option *ngFor="let tipo of tipos" [value]="tipo.id">{{ tipo.materia }}</option>
                     </select>
@@ -132,7 +132,7 @@
                         <textarea class="form-control" id="descripcion" [(ngModel)]="descripcion" name="descripcion"></textarea>
                     </section>
                     <section class="mb-3">
-                        <label for="tipo" class="form-label">Tipo <span>(Si el tipo de expediente que buscas no aparece, añadelo <a href="localhost:4200/tipos_expedientes">aqui</a>)</span> </label>
+                        <label for="tipo" class="form-label">Tipo</label>
                         <select class="form-control" id="tipoId" [(ngModel)]="tipoId" name="tipoId">
                             <option *ngFor="let tipo of tipos" [value]="tipo.id">{{ tipo.materia }}</option>
                         </select>
