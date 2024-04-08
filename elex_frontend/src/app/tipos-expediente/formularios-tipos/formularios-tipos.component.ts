@@ -12,7 +12,7 @@ import { FormControl } from '@angular/forms';
 export class FormulariosTiposComponent implements OnInit {
   tipos: Tipos[] = [];
   tiposBorrados: Tipos[] = [];
-  tiposFiltrados: Tipos[] = []; // Definición de la propiedad tiposFiltrados
+  tiposFiltrados: Tipos[] = [];
   mensaje: string = "";
   materia: string = "";
   tipoParaActualizar: Tipos | null = null;
@@ -127,7 +127,7 @@ export class FormulariosTiposComponent implements OnInit {
             });
             this.tipos = this.tipos.filter(tipo => tipo.id !== id);
             this.cargarTiposBorrados();
-            this.cargarTipos(); // <-- Recargar la lista de tipos borrados
+            this.cargarTipos();
         });
     }
 }
@@ -148,7 +148,6 @@ export class FormulariosTiposComponent implements OnInit {
 
   filtrarTipos(searchTerm: string = ''): void {
     if (!searchTerm.trim()) {
-      // Si no hay término de búsqueda, mostrar todos los tipos
       this.tiposFiltrados = this.tipos;
     } else {
       // Filtrar los tipos según el término de búsqueda

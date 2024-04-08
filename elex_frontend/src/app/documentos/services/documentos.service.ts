@@ -14,10 +14,7 @@ import { Observable, map } from 'rxjs';
   providedIn: 'root'
 })
 export class DocumentosService {
-  // Atributo con la raiz de los endpoints
   private baseURL = `${environment.apiURL}/documentos`;
-
-  // En el constructor inyecto el HttpClient para gestionar endpoints
   constructor(private http: HttpClient) {}
 
   // Insertar documentos
@@ -41,7 +38,7 @@ export class DocumentosService {
   consultarDocumentosBorrados(): Observable<Documentos[]> {
     const url = `${this.baseURL}/consultar`;
     return this.http.get<Documentos[]>(url).pipe(
-      // Filtrar los tipos de expediente donde el campo "borrado" sea falso (0)
+      // Filtrar los tipos de expediente donde el campo "borrado" sea verdadero (1)
       map(tiposBorrados => tiposBorrados.filter(tipo => tipo.borrado === true))
     );
   }
@@ -72,7 +69,6 @@ export class DocumentosService {
     return this.http.put<void>(url, {});
   }
 
-  
   // Recuperacion documentos
   // @PutMapping("/recuperarDocumento/{id}")
   recuperarDocumentos(id: number): Observable<void> {

@@ -26,6 +26,7 @@ export class ActuacionesService {
     const url = `${this.baseURL}/insertar/${descripcion}/${finalizado}/${fecha}/${expedienteId}`;
     return this.http.post<Actuaciones>(url, {});
   }
+  
   // Consultar actuaciones
   // @GetMapping("/consultar")
   consultarActuaciones(): Observable<Actuaciones[]> {
@@ -35,14 +36,14 @@ export class ActuacionesService {
       map(actuaciones => actuaciones.filter(actuacion => actuacion.borrado === false))
     );
   }
-    // Muestra toodos los datos
-    consultarActuacionesBorradas(): Observable<Actuaciones[]> {
-      const url = `${this.baseURL}/consultar`;
-      return this.http.get<Actuaciones[]>(url).pipe(
-        // Filtrar los tipos de expediente donde el campo "borrado" sea falso (0)
-        map(actuacionesBorradas => actuacionesBorradas.filter(actuacion => actuacion.borrado === true))
-      );
-    }
+  // Muestra toodos los datos
+  consultarActuacionesBorradas(): Observable<Actuaciones[]> {
+    const url = `${this.baseURL}/consultar`;
+    return this.http.get<Actuaciones[]>(url).pipe(
+      // Filtrar los tipos de expediente donde el campo "borrado" sea falso (0)
+      map(actuacionesBorradas => actuacionesBorradas.filter(actuacion => actuacion.borrado === true))
+    );
+  }
   //Consultar entidad Expedientes
   consultarExpedientes(): Observable<Expedientes[]> {
     const url = `${environment.apiURL}/expedientes/consultar`; 

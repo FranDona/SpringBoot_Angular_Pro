@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators'; // Importa los operadores de RxJS
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { DocumentosService } from '../services/documentos.service';
 import { Documentos } from '../models/documentos.model';
 import { Expedientes } from '../../expedientes/models/expedientes.model';
@@ -64,7 +64,7 @@ export class FormulariosDocumentosComponent implements OnInit {
 
   insertarDocumentos(): void {
     this.loading = true;
-    const rutaGenerada = this.generarRuta(); // Genera la ruta automáticamente
+    const rutaGenerada = this.generarRuta(); 
     this.servicio.insertarDocumentos(rutaGenerada, this.tasa, this.expedienteId).subscribe(
       () => {
         this.mensaje = 'Documento Insertado';
@@ -85,20 +85,14 @@ export class FormulariosDocumentosComponent implements OnInit {
     const rutaBase = 'ruta-pdf';
     let numeroDocumento = this.contadorDocumentos.toString().padStart(3, '0'); // Asegura que el número tenga tres dígitos (por ejemplo, 001, 002, etc.)
     
-    // Verificar si la ruta generada ya existe en la lista de documentos
     let rutaExistente = this.documentos.find(documento => documento.ruta === (rutaBase + numeroDocumento));
     
-    // Si la ruta generada ya existe, incrementar el contador y volver a verificar hasta encontrar un nombre único
     while (rutaExistente) {
       this.contadorDocumentos++;
       numeroDocumento = this.contadorDocumentos.toString().padStart(3, '0');
       rutaExistente = this.documentos.find(documento => documento.ruta === (rutaBase + numeroDocumento));
     }
-  
-    // Incrementa el contador para el próximo documento
     this.contadorDocumentos++;
-  
-    // Devuelve la ruta única generada
     return rutaBase + numeroDocumento;
   }
 
@@ -124,8 +118,6 @@ export class FormulariosDocumentosComponent implements OnInit {
       );
     }
   }
-
- 
 
   prepararActualizacion(documento: Documentos): void {
     this.documentosParaActualizar = documento;
@@ -177,7 +169,7 @@ export class FormulariosDocumentosComponent implements OnInit {
           this.mensaje = 'Documento borrado lógicamente';
           this.loading = true;
           this.snackBar.open('Documento borrado lógicamente correctamente', 'Cerrar', {
-            duration: 5000, // Duración extendida a 5 segundos
+            duration: 5000, 
             horizontalPosition: 'center',
             verticalPosition: 'bottom'
           });
@@ -186,7 +178,7 @@ export class FormulariosDocumentosComponent implements OnInit {
         },
         (error) => {
           this.snackBar.open('Error al borrar lógicamente el documento', 'Cerrar', {
-            duration: 5000, // Duración extendida a 5 segundos
+            duration: 5000, 
             horizontalPosition: 'center',
             verticalPosition: 'bottom'
           });
@@ -208,10 +200,8 @@ export class FormulariosDocumentosComponent implements OnInit {
     });
   }
 
-
   filtrarDocumentos(searchTerm: string = ''): void {
     if (!searchTerm.trim()) {
-      // Si no hay término de búsqueda, mostrar todos los tipos
       this.documentosFiltrados = this.documentos;
     } else {
       // Filtrar los tipos según el término de búsqueda

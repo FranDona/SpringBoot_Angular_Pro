@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Importa BrowserAnimationsModule o NoopAnimationsModule según tus necesidades
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,7 +25,7 @@ import { FormulariosDocumentosComponent } from './documentos/formularios-documen
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule, // Agrega BrowserAnimationsModule o NoopAnimationsModule aquí
+    BrowserAnimationsModule,
     AppRoutingModule,
     MatSnackBarModule,
     HttpClientModule,

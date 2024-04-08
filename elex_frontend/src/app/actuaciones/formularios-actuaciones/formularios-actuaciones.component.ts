@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-// Importacion de Angular Material
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { ActuacionesService } from '../services/actuaciones.service';
@@ -19,7 +18,7 @@ export class FormulariosActuacionesComponent implements OnInit {
   actuacionesBorradas: Actuaciones[] = [];
   actuacionesFiltradas: Actuaciones[] = [];
   mensaje = "";
-  expedientes: Expedientes[] = []; // Añadimos un arreglo para almacenar los expedientes
+  expedientes: Expedientes[] = []; 
   descripcion: string = "";
   finalizado: boolean = false;
   fecha: string = "";
@@ -33,7 +32,6 @@ export class FormulariosActuacionesComponent implements OnInit {
   searchTerm: string = '';
   loading: boolean = false;
 
-  // Inyectar "private snackBar: MatSnackBar para Angular Material
   constructor(private servicio: ActuacionesService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
@@ -76,7 +74,6 @@ export class FormulariosActuacionesComponent implements OnInit {
         this.cargarActuaciones();
       }
     },
-      //Mensaje de Angular Material
       error => {
         this.snackBar.open('Actuacion duplicada', 'Cerrar', {
           duration: 3000,
@@ -87,14 +84,8 @@ export class FormulariosActuacionesComponent implements OnInit {
     );
   }
 
-
-
-
   actualizarActuacionesFormulario(): void {
     if (this.actuacionesParaActualizar && this.descripcionActualizar !== null && this.finalizadoActualizar !== null && this.fechaActualizar !== null) {
-      // Formatear la fecha para que coincida con el formato esperado por el backend, por ejemplo:
-      // const fechaFormateada = new Date(this.fechaActualizar).toISOString();
-      
       this.servicio.actualizarActuaciones(this.actuacionesParaActualizar.id, this.descripcionActualizar, this.finalizadoActualizar, this.fechaActualizar).subscribe(
         () => {
           this.mensaje = "Actuacion actualizada";
@@ -116,11 +107,6 @@ export class FormulariosActuacionesComponent implements OnInit {
       );
     }
   }
-  
-
-
-
-
 
   prepararActualizacion(actuacion: Actuaciones): void {
     this.actuacionesParaActualizar = actuacion;
@@ -133,6 +119,7 @@ export class FormulariosActuacionesComponent implements OnInit {
     this.actuacionesParaActualizar = null;
     this.resetFormulario();
   }
+
   resetFormulario(): void {
     this.loading = true;
     this.descripcion = "";
@@ -152,7 +139,6 @@ export class FormulariosActuacionesComponent implements OnInit {
     }
   }
 
-
   borradoLogicoActuaciones(id: number): void {
     if (confirm('¿Estás seguro de querer borrar lógicamente este documento?')) {
       this.servicio.borradoLogicoActuaciones(id).subscribe(
@@ -160,7 +146,7 @@ export class FormulariosActuacionesComponent implements OnInit {
           this.mensaje = 'Documento borrado lógicamente';
           this.loading = true;
           this.snackBar.open('Documento borrado lógicamente correctamente', 'Cerrar', {
-            duration: 5000, // Duración extendida a 5 segundos
+            duration: 5000, 
             horizontalPosition: 'center',
             verticalPosition: 'bottom'
           });
@@ -169,7 +155,7 @@ export class FormulariosActuacionesComponent implements OnInit {
         },
         (error) => {
           this.snackBar.open('Error al borrar lógicamente el documento', 'Cerrar', {
-            duration: 5000, // Duración extendida a 5 segundos
+            duration: 5000,
             horizontalPosition: 'center',
             verticalPosition: 'bottom'
           });
@@ -177,7 +163,6 @@ export class FormulariosActuacionesComponent implements OnInit {
       );
     }
   }
-
 
   recuperarActuaciones(id: number): void {
     this.servicio.recuperarActuaciones(id).subscribe(() => {
@@ -192,13 +177,10 @@ export class FormulariosActuacionesComponent implements OnInit {
     });
   }
 
-
   filtrarActuaciones(searchTerm: string = ''): void {
     if (!searchTerm.trim()) {
-      // Si no hay término de búsqueda, mostrar todas las actuaciones
       this.actuacionesFiltradas = this.actuaciones;
     } else {
-      // Convertir el término de búsqueda a minúsculas para una comparación insensible a mayúsculas y minúsculas
       const searchTermLowerCase = searchTerm.toLowerCase();
       // Filtrar las actuaciones según el término de búsqueda en varios campos
       this.actuacionesFiltradas = this.actuaciones.filter(actuacion =>

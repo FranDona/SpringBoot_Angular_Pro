@@ -13,10 +13,7 @@ import { Tipos } from '../../tipos-expediente/models/tipos.model';
   providedIn: 'root',
 })
 export class ExpedientesService {
-  // Atributo con la raiz de los endpoints
   private baseURL = `${environment.apiURL}/expedientes`;
-  
-  // En el constructor inyecto el HttpClient para gestionar endpoints
   constructor(private http: HttpClient) {}
 
   // Insertar expedientes
@@ -39,7 +36,7 @@ export class ExpedientesService {
   consultarExpedientesBorrados(): Observable<Expedientes[]> {
     const url = `${this.baseURL}/consultar`;
     return this.http.get<Expedientes[]>(url).pipe(
-      // Filtrar los tipos de expediente donde el campo "borrado" sea falso (0)
+      // Filtrar los tipos de expediente donde el campo "borrado" sea verdadero (1)
       map(expedientesBorrados => expedientesBorrados.filter(expediente => expediente.borrado === true))
     );
   }
@@ -71,6 +68,8 @@ export class ExpedientesService {
     return this.http.put<void>(url, {});
   }
 
+  // Recuperado de expedientes
+  // @DPutMapping("/recuperarExpedientes/{id}")
   recuperarExpedientes(id: number): Observable<void> {
     const url = `${this.baseURL}/recuperarExpedientes/${id}`;
     return this.http.put<void>(url, {});
