@@ -62,24 +62,24 @@ INSERT INTO tipos_expediente (materia, borrado) VALUES
 ('Matrimonio', false),
 ('Militar', false),
 ('Judicial', false),
-('Educación', false);
+('Educación', true);
 
 -- Insertar datos de ejemplo en la tabla expedientes
 INSERT INTO expedientes (codigo, fecha, estado, opciones, descripcion, tipo, borrado) VALUES
 ('COD001', '2024-02-12', 'Pendiente', 'Información legal', 'Análisis detallado de un caso de propiedad intelectual con implicaciones legales internacionales.', 1, false),
 ('COD002', '2024-01-17', 'Enviado', 'Información laboral', 'Informe exhaustivo sobre el rendimiento trimestral de una empresa en crecimiento en el sector tecnológico.', 2, false),
 ('COD003', '2024-02-11', 'Erróneo', 'Información médica', 'Historial clínico completo de un paciente con diagnóstico de enfermedad crónica y tratamiento multidisciplinario.', 3, false),
-('COD004', '2024-02-19', 'Pendiente', 'Información financiera', 'Resumen de la investigación de un caso de discriminación en el lugar de trabajo basado en género y origen étnico.', 4, false);
+('COD004', '2024-02-19', 'Pendiente', 'Información financiera', 'Resumen de la investigación de un caso de discriminación en el lugar de trabajo basado en género y origen étnico.', 4, true);
 
 -- Insertar datos de ejemplo en la tabla actuaciones
 INSERT INTO actuaciones (descripcion, finalizado, fecha, expediente, borrado) VALUES
 ('Investigación legal en curso.', false, '2024-03-20', 1, false),
 ('Entrevista de investigación laboral completada.', true, '2024-02-21', 2, false),
-('Recopilación de datos médicos todavía  en curso', false, '2024-03-22', 3, false),
+('Recopilación de datos médicos todavía  en curso', false, '2024-03-22', 3, true),
 ('Análisis financiero en progreso.', false, '2024-03-23', 4, false);
 
 -- Insertar datos de ejemplo en la tabla documentos
 INSERT INTO documentos (ruta, tasa, expediente, borrado) VALUES
 ('ruta-pdf001', 100.00, 1, false),
 ('ruta-pdf002', 200.00, 2, false),
-('ruta-pdf003', 300.00, 3, false);
+('ruta-pdf003', 300.00, 3, true);
