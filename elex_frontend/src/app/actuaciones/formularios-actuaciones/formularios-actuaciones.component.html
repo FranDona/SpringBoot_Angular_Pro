@@ -125,7 +125,7 @@
               <th scope="col">Codigo Expediente</th>
               <th scope="col">Apertura del expediente</th>
               <th scope="col">Estado</th>
-              <th scope="col"></th>
+              <th scope="col">Acciones</th>
           </tr>
       </thead>
       <!-- Modifico la tabla para añadir los botones adicionales -->
@@ -133,7 +133,11 @@
           <tr *ngFor="let actuacion of actuacionesFiltradas">
               <td>{{ actuacion.id }}</td>
               <td>{{ actuacion.descripcion }}</td>
-              <td>{{ actuacion.finalizado }}</td>
+              <td>
+                <span [innerHTML]="actuacion.finalizado ? 'Finalizado <i class=&quot;fa-solid fa-check&quot;></i>' : 'En Curso <i class=&quot;fa-solid fa-hourglass-start&quot;></i>'"></span>
+              </td>
+              
+              
               <td>{{ actuacion.fecha }}</td>
               <td>{{ actuacion.expediente.codigo }}</td>
               <td>{{ actuacion.expediente.fecha }}</td>
@@ -174,7 +178,7 @@
           <tbody>
               <tr *ngFor="let actuacion of actuacionesBorradas">
                   <td>{{ actuacion.id }}</td>
-                  <td>{{ actuacion.finalizado }}</td>
+                  <td>{{ actuacion.finalizado ? 'Sí' : 'No' }}</td>
                   <td>{{ actuacion.fecha }}</td>
                   <td>{{ actuacion.expediente.codigo }}</td>
                   <td>{{ actuacion.expediente.estado }}</td>
